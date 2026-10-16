@@ -1,6 +1,6 @@
 # Orbit Forge
 
-An automatic space-mining game. Build a ship, choose weapons, collect resources, research technology, meet alien ships, and earn permanent upgrades by entering new universes.
+An automatic space-mining game. Modify Your ship, choose weapons, collect resources, research technology, meet alien ships, and earn permanent upgrades by entering new universes.
 
 Current version: **0.9.51**.
 
