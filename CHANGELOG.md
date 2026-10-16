@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.9.52
+
+- Scale alien hulls, hit areas and engine plumes by source ship mass, relative to player mass 4.
+- Normalize sprite lengths and use world units consistently across mining, visitors, combat and wrecks.
+- Apply source turn waits, thrust increments and thrust waits, including alternate forms.
+- Start Lattice Ark with 10 of 20 energy; retain Pearl Disc speed and full-tank teleport.
+- Predict evasive movement using each alien ship's actual acceleration and size.
+
 ## 0.9.51
 
 - Ring blocks break in one hit and award exactly one credit.

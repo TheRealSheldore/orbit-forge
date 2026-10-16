@@ -2,7 +2,7 @@
 
 An automatic space-mining game. Modify Your ship, choose weapons, collect resources, research technology, meet alien ships, and earn permanent upgrades by entering new universes.
 
-Current version: **0.9.51**.
+Current version: **0.9.52**.
 
 ## Play locally
 
@@ -21,7 +21,7 @@ Open **http://localhost:8000** in your browser. The preparation command joins th
 python tools/build.py
 ```
 
-The output is `dist/Orbit-Forge-v0.9.51.html`. It includes the music, artwork, and code in one file and can be opened offline.
+The output is `dist/Orbit-Forge-v0.9.52.html`. It includes the music, artwork, and code in one file and can be opened offline.
 
 ## Project files
 
