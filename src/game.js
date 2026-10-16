@@ -223,7 +223,7 @@ function drawWeaponSprite(index,x,y,width,height,angle=0,opacity=1){if(!alienWea
 function drawAlienBeamEffect(f,cx,cy,z){
  if(!['beam','laser','lightning','tongue','tractor'].includes(f.kind)||Number.isInteger(f.playerWeapon))return false;
  let x=cx+f.x*z,y=cy+f.y*z,dx=(f.x2-f.x)*z,dy=(f.y2-f.y)*z,len=Math.hypot(dx,dy);ctx.save();ctx.globalAlpha=Math.max(0,1-f.age/f.life);ctx.strokeStyle=f.color||'#d9ffff';ctx.shadowColor=ctx.strokeStyle;ctx.shadowBlur=z*.25;ctx.lineWidth=Math.max(.6,z*(f.kind==='tongue'?.25:.07));ctx.beginPath();ctx.moveTo(x,y);
- if(f.kind==='lightning'){let nx=-dy/(len||1),ny=dx/(len||1);for(let j=1;j<16;j++){let noise=Math.sin(j*7+(f.seed||0)+encounter.elapsed*65)*z*.22;ctx.lineTo(x+dx*j/16+nx*noise,y+dy*j/16+ny*noise);}ctx.lineTo(x+dx,y+dy);}
+ if(f.kind==='lightning'&&f.path){for(let q of f.path)ctx.lineTo(cx+q.x*z,cy+q.y*z);}else if(f.kind==='lightning'){let nx=-dy/(len||1),ny=dx/(len||1);for(let j=1;j<16;j++){let noise=Math.sin(j*7+(f.seed||0)+encounter.elapsed*65)*z*.22;ctx.lineTo(x+dx*j/16+nx*noise,y+dy*j/16+ny*noise);}ctx.lineTo(x+dx,y+dy);}
  else if(f.kind==='tractor'){for(let j=1;j<=20;j++){let n=Math.sin(j*1.5-encounter.elapsed*16)*z*.18;ctx.lineTo(x+dx*j/20-dy/(len||1)*n,y+dy*j/20+dx/(len||1)*n);}}
  else ctx.lineTo(x+dx,y+dy);ctx.stroke();if(f.kind!=='tractor'){ctx.shadowBlur=0;ctx.strokeStyle='#ffffff';ctx.lineWidth=Math.max(.4,z*.025);ctx.stroke();}ctx.restore();return true;
 }
@@ -917,7 +917,7 @@ function alienSecondary(m,dt,dist,angle,threat){
  // Continuous modes use source tick costs, not a shared seconds-long cooldown.
  if(kind==='xray'){
   if(!m.satellites){alienLaunch(m,'satellite',3,power);m.satellites=true;}
-  if(dist<18&&e.elapsed-(m.tractorAt??-100)>=1/24&&crewSpend(m,1)){m.tractorAt=e.elapsed;let pull=Math.min(8,60/Math.max(3,dist));p.vx=(p.vx||0)+Math.cos(angle+Math.PI)*pull*dt;p.vy=(p.vy||0)+Math.sin(angle+Math.PI)*pull*dt;e.effects.push({kind:'tractor',x:m.x,y:m.y,x2:p.x,y2:p.y,color:'#8ea2ff',age:0,life:.12});}
+  if(dist<18&&m.energy>cfg.mainEnergy+2&&e.elapsed-(m.tractorAt??-100)>=1/24&&crewSpend(m,1)){m.tractorAt=e.elapsed;let pull=Math.min(8,60/Math.max(3,dist));p.vx=(p.vx||0)+Math.cos(angle+Math.PI)*pull*dt;p.vy=(p.vy||0)+Math.sin(angle+Math.PI)*pull*dt;e.effects.push({kind:'tractor',x:m.x,y:m.y,x2:p.x,y2:p.y,color:'#8ea2ff',age:0,life:.12});}
  }
  if(kind==='bubble'&&m.blazerUntil>e.elapsed){if(dist<1.1&&e.elapsed-(m.lastRam??-100)>=.2){m.lastRam=e.elapsed;playerCrewDamage(3*power);}return;}
  if(kind==='torch'&&m.boostUntil>e.elapsed){
@@ -954,7 +954,7 @@ function alienSecondary(m,dt,dist,angle,threat){
  if(used)m.specialAt=e.elapsed;
 }
 // Primary trajectories share the same numbers used by the projectile spawner.
-function alienBallistics(m){let kind=ALIEN_COMBAT[m.style][6],speed={fusion:24,disc:19.2,plasma:9.6,howitzer:36,crystal:19.2,globule:36,flame:7.5,mass:36,bubble:9.6,missile:12,particle:36,spray:12,torch:36,dart:28.8,rear:36,battery:36,twin:24,triple:28.8,charge:54}[kind]||0,frames={fusion:20,disc:64,plasma:143,howitzer:12,crystal:90,globule:10,flame:8,mass:20,bubble:200,missile:60,particle:10,spray:10,torch:15,dart:10,rear:10,battery:10,twin:10,triple:5,charge:10}[kind]||0,homing=['plasma','bubble','missile','disc'].includes(kind);if(kind==='transform'){speed=m.fastForm?24:0;frames=m.fastForm?40:0;homing=!!m.fastForm;}let range=kind==='transform'?(m.fastForm?40:6.25):ALIEN_COMBAT[m.style][5];return {kind,speed,life:frames/24,homing,range:speed&&!homing?Math.min(range,speed*frames/24+alienRadius(m)):range};}
+function alienBallistics(m){let kind=ALIEN_COMBAT[m.style][6],speed={fusion:24,disc:4.48,plasma:9.6,howitzer:36,crystal:19.2,globule:36,flame:7.5,mass:36,bubble:9.6,missile:12,particle:36,spray:12,torch:36,dart:28.8,rear:36,battery:36,twin:24,triple:28.8,charge:54}[kind]||0,frames={fusion:20,disc:64,plasma:143,howitzer:12,crystal:90,globule:10,flame:8,mass:20,bubble:200,missile:60,particle:10,spray:10,torch:15,dart:10,rear:10,battery:10,twin:10,triple:5,charge:10}[kind]||0,homing=['plasma','bubble','missile'].includes(kind);if(kind==='transform'){speed=m.fastForm?24:0;frames=m.fastForm?40:0;homing=!!m.fastForm;}let range=kind==='transform'?(m.fastForm?40:6.25):ALIEN_COMBAT[m.style][5];return {kind,speed,life:frames/24,homing,range:speed&&!homing?Math.min(range,speed*frames/24+alienRadius(m)):range};}
 function alienInterceptAim(m,target=encounter.player){let shot=alienBallistics(m),dx=target.x-m.x,dy=target.y-m.y,vx=target.vx||0,vy=target.vy||0,t=0;if(shot.speed&&!shot.homing){let aa=vx*vx+vy*vy-shot.speed**2,bb=2*(dx*vx+dy*vy),cc=dx*dx+dy*dy,disc=bb*bb-4*aa*cc;if(Math.abs(aa)<1e-8){if(bb<0)t=-cc/bb;}else if(disc>=0){let roots=[(-bb-Math.sqrt(disc))/(2*aa),(-bb+Math.sqrt(disc))/(2*aa)].filter(x=>x>=0);if(roots.length)t=Math.min(...roots);}t=Math.min(t,shot.life||2);}return Math.atan2(dy+vy*t,dx+vx*t);}
 function alienFirePrimary(m,dist,angle){
  let e=encounter,p=e.player,cfg=ALIEN_SOURCE[m.style],kind=ALIEN_COMBAT[m.style][6],range=ALIEN_COMBAT[m.style][5],power=alienPower(),damage=cfg.damage*power;
@@ -963,7 +963,7 @@ function alienFirePrimary(m,dist,angle){
  if(kind==='howitzer')aim=m.turretAngle??m.a;
  if(kind==='transform'){actual=m.fastForm?'xmissile':'xlaser';range=m.fastForm?40:6.25;}
  let error=alienFacing(angle,aim),auto=['lightning','laser'].includes(actual);
- if(dist>range||(!auto&&actual!=='triple'&&error>.25))return false;
+ if(dist>range||(!auto&&actual!=='triple'&&error>(alienBallistics(m).homing?.9:.25)))return false;
  if(!auto&&!alienBallistics(m).homing&&!['triple','spray','cone','bubble'].includes(actual)){let tolerance=Math.atan2(hullBound(p,true)+.18,Math.max(.1,dist));if(alienFacing(alienInterceptAim(m),aim)>Math.max(.04,tolerance))return false;}if(kind==='cone'&&m.rechargeCone)return false;
  if(kind==='laser'&&m.reserveJump&&m.energy<m.energyMax)return false;
  if(kind==='crystal'&&e.shots.some(q=>q.source===m&&q.kind==='crystal'&&q.life>0))return false;
@@ -978,7 +978,7 @@ function alienFirePrimary(m,dist,angle){
   if(!crewSpend(m,cfg.mainEnergy))return false;
   if(kind==='flame')m.cloakUntil=0;
   if(actual==='laser')alienBeam(m,'#fffba6',damage,range,'laser');
-  else if(actual==='lightning')alienBeam(m,'#d8e5ff',damage,range,'lightning');
+  else if(actual==='lightning'){e.actors.push({kind:'probeBolt',owner:m,x:m.x,y:m.y,age:0,life:.5,clock:0,segments:0,path:[{x:m.x,y:m.y}],damage,range,hit:false});alienWeaponSound(m,'lightning');}
   else if(actual==='xray'||actual==='cutting')alienBeam(m,actual==='xray'?'#ffdddd':'#71ff79',damage,range,'beam');
   else if(actual==='xlaser')for(let side of [-1,1])alienBeam({...m,x:m.x-Math.sin(m.a)*side*.15,y:m.y+Math.cos(m.a)*side*.15},'#ff7c7c',power,range,'beam');
   else if(actual==='cone'){e.effects.push({kind:'weaponCone',x:m.x,y:m.y,a:m.a,radius:range,color:'#abbaff',age:0,life:1/24});if(error<.35&&dist<range)playerCrewDamage(damage);for(let q of e.shots)if(!q.enemy&&q.life>0&&Math.hypot(q.x-m.x,q.y-m.y)<range&&alienFacing(Math.atan2(q.y-m.y,q.x-m.x),m.a)<.35)q.life=0;}
@@ -986,12 +986,12 @@ function alienFirePrimary(m,dist,angle){
   else if(actual==='twin')for(let side of [-.18,.18])alienShot(m,'twin',aim,damage,24,10,{life:10/24,hp:1,side});
   else if(actual==='triple')for(let heading of [m.a,m.a-Math.PI/2,m.a+Math.PI/2])alienShot(m,'triple',heading,damage,28.8,6,{life:5/24,hp:1});
   else if(actual==='xmissile')for(let side of [-.18,.18])alienShot(m,'missile',m.a,power,24,40,{life:40/24,home:1,hp:1,side});
-  else{let speeds={fusion:24,disc:19.2,plasma:9.6,howitzer:36,crystal:19.2,globule:36,flame:7.5,mass:36,bubble:9.6,missile:12,particle:36,spray:12,torch:36,dart:28.8,rear:36},lives={fusion:20,disc:64,plasma:143,howitzer:12,crystal:90,globule:10,flame:8,mass:20,bubble:200,missile:60,particle:10,spray:10,torch:15,dart:10,rear:10},hp={fusion:10,disc:10,plasma:10,howitzer:2,crystal:10,globule:1,flame:1,mass:4,bubble:3,missile:1,particle:1,spray:1,torch:2,dart:1,rear:1};
+  else{let speeds={fusion:24,disc:4.48,plasma:9.6,howitzer:36,crystal:19.2,globule:36,flame:7.5,mass:36,bubble:9.6,missile:12,particle:36,spray:12,torch:36,dart:28.8,rear:36},lives={fusion:20,disc:64,plasma:143,howitzer:12,crystal:90,globule:10,flame:8,mass:20,bubble:200,missile:60,particle:10,spray:10,torch:15,dart:10,rear:10},hp={fusion:10,disc:10,plasma:10,howitzer:2,crystal:10,globule:1,flame:1,mass:4,bubble:3,missile:1,particle:1,spray:1,torch:2,dart:1,rear:1};
    alienShot(m,actual==='rear'?'dart':actual,actual==='spray'?aim+(Math.random()-.5)*.38:aim,damage,speeds[actual]||24,range,{life:(lives[actual]||10)/24,hp:hp[actual]||1,home:['plasma','bubble','missile'].includes(actual)?1.1:0});
    if(actual==='mass'){m.vx=(m.vx||0)-Math.cos(m.a)*3;m.vy=(m.vy||0)-Math.sin(m.a)*3;}
   }
  }
- m.lastShot=e.elapsed;m.attacks=(m.attacks||0)+1;return true;
+ m.lastShot=e.elapsed;m.attacks=(m.attacks||0)+1;m.attackUntil=0;m.attackRecoverUntil=e.elapsed+Math.min(.35,(cfg.mainWait+1)/24*.4);return true;
 }
 
 // UQM concern states: intercept the enemy, entice it into range, or evade an incoming shot.
@@ -999,7 +999,7 @@ function sourceCombatIntent(m){let e=encounter,p=e.player,cfg=ALIEN_SOURCE[m.sty
  let mode=(range<6||motion.speed<shipSpeed()&&range<12)?'PURSUE':'ENTICE',heading=aim,thrust=dist>range*.72,fire=true,special=true;
  switch(m.style){
  case 0:mode='PURSUE';special=dist<cfg.fighterLaunchRange&&alienCrew(m)>m.crewMax/4;break;
- case 1:special=!!threat;break;
+ case 1:special=alienThreat(m,8/24).length>0||dist<hullBound(m)+hullBound(p,true)+1;break;
  case 2:mode=turns<=6?'ENTICE':'PURSUE';break;
  case 3:special=dist>2.24;break;
  case 4:case 22:mode='PURSUE';special=!!threat;break;
@@ -1020,7 +1020,7 @@ function sourceCombatIntent(m){let e=encounter,p=e.player,cfg=ALIEN_SOURCE[m.sty
  case 19:special=dist<1.8&&alienFacing(angle,m.a)<.4;if(special)fire=false;break;
  case 20:special=alienFacing(angle,m.a+Math.PI)<.6&&dist<4;break;
  case 21:mode=dist>8||Math.hypot(p.vx||0,p.vy||0)<.1?'PURSUE':'ENTICE';special=alienFacing(aim,m.a)<.4||!!threat;break;
- case 23:mode='ENTICE';special=!!threat;break;
+ case 23:mode='ENTICE';special=alienThreat(m,6/24).length>0;break;
  case 24:special=dist<3&&alienCrew(m)<m.crewStarting*.35;break;
  }
  let inner=Math.max(hullBound(m)+hullBound(p,true)+.5,range*.35),outer=Math.max(inner+1,range*.8);
@@ -1032,10 +1032,20 @@ function sourceCombatIntent(m){let e=encounter,p=e.player,cfg=ALIEN_SOURCE[m.sty
   else if(m.navPhase==='withdraw'){let wantX=-dx/(dist||1)*motion.speed,wantY=-dy/(dist||1)*motion.speed;heading=Math.atan2(wantY-(m.vy||0),wantX-(m.vx||0));thrust=true;}
   else {heading=aim;thrust=false;}
  }
- if(threat&&![3,4,17,22].includes(m.style)&&!(m.style===10&&dist<4)&&!(m.style===15&&m.blazerUntil>e.elapsed)){
+ if(threat&&![2,3,4,17,22].includes(m.style)&&!(m.style===10&&dist<4)&&!(m.style===15&&m.blazerUntil>e.elapsed)){
   if(!(m.evadeUntil>e.elapsed)){let dodge=combatEvasion(m,false,motion.speed,motion.turn);m.evadeHeading=dodge??aim;m.evadeUntil=e.elapsed+.4;}
   heading=m.evadeHeading;thrust=true;mode='AVOID';
- }else if(m.evadeUntil>e.elapsed&&![3,4,17,22].includes(m.style)){heading=m.evadeHeading;thrust=true;mode='AVOID';}
+ }else if(m.evadeUntil>e.elapsed&&![2,3,4,17,22].includes(m.style)){heading=m.evadeHeading;thrust=true;mode='AVOID';}
+ if(['flame','cone'].includes(kind)){heading=aim;thrust=dist>Math.max(.4,range*.35);m.navPhase='approach';}
+ // Source intelligence considers movement and firing separately. Give a ready forward gun
+ // an aiming window while momentum carries the ship, even during a withdrawal.
+ let ballistics=alienBallistics(m),autoGun=['lightning','laser'].includes(kind),readyToAim=fire&&(m.energy>=cfg.mainEnergy||m.chargeAt!=null)&&e.elapsed>=(m.nextFire??0)&&dist<ballistics.range;
+ if(!autoGun&&readyToAim&&!(m.attackRecoverUntil>e.elapsed)&&!(m.blazerUntil>e.elapsed)){
+  if(!(m.attackUntil>e.elapsed))m.attackUntil=e.elapsed+Math.min(3.5,alienFacing(aim,m.a)/Math.max(.1,motion.turn)+.45);
+  heading=kind==='howitzer'?heading:aim;
+  if(kind!=='howitzer')thrust=dist>ballistics.range*.8&&alienFacing(aim,angle)<.4;
+ }
+ if(mode!=='AVOID'&&m.navPhase==='coast'&&Math.hypot(m.vx||0,m.vy||0)<motion.speed*.45&&!readyToAim){heading=aim;thrust=true;}
  if(kind==='bubble'&&m.blazerUntil>e.elapsed){heading=angle;thrust=true}
  if(kind==='torch'&&m.boostUntil>e.elapsed){heading=m.boostHeading??m.a;thrust=true}
  if(kind==='particle'&&e.crewPods.length){let q=e.crewPods.reduce((a,b)=>Math.hypot(a.x-m.x,a.y-m.y)<Math.hypot(b.x-m.x,b.y-m.y)?a:b);heading=Math.atan2(q.y-m.y,q.x-m.x);thrust=true}
@@ -1046,7 +1056,7 @@ function sourceCombatIntent(m){let e=encounter,p=e.player,cfg=ALIEN_SOURCE[m.sty
 function stepAlienCombatBase(m,dt){
  let e=encounter,p=e.player,cfg=ALIEN_SOURCE[m.style],kind=ALIEN_COMBAT[m.style][6],motion=alienMotion(m.style,m);
  alienEnergyStep(m,dt);if(kind==='cone'){if(m.energy<=3)m.rechargeCone=true;if(m.energy>=m.energyMax)m.rechargeCone=false;}let dist=Math.hypot(p.x-m.x,p.y-m.y),angle=Math.atan2(p.y-m.y,p.x-m.x),lead=dist/24,aim=alienInterceptAim(m),threat=alienThreat(m,1.5).length>0;
- if(kind==='laser'){if(threat)m.reserveJump=true;if(m.energy>=m.energyMax)m.reserveJump=false;}
+ if(kind==='laser')m.reserveJump=alienThreat(m,3/24).length>0;
  if(kind==='howitzer'){let delta=Math.atan2(Math.sin(aim-(m.turretAngle??m.a)),Math.cos(aim-(m.turretAngle??m.a)));m.turretAngle=(m.turretAngle??m.a)+Math.max(-2.356*dt,Math.min(2.356*dt,delta));}
  let intent=sourceCombatIntent(m);alienSecondary(m,dt,dist,angle,threat);
  if(m.phaseUntil>e.elapsed){m.thrust=0;return;}
@@ -1119,10 +1129,14 @@ function alienRing(m,color,range,damage){alienWeaponSound(m,'ring');let e=encoun
 function steerAlienShot(q,dt){
  if(!q.enemy)return;q.age=(q.age||0)+dt;let e=encounter,p=e.player;
  if(q.kind==='disc'){
-  let dist=Math.hypot(q.x-p.x,q.y-p.y);
-  if(!q.parked&&q.age>.6){q.parked=true;q.vx=q.vy=0;q.life=60;}
-  if(q.parked&&dist<12){let a=Math.atan2(p.y-q.y,p.x-q.x);q.vx=Math.cos(a)*19.2;q.vy=Math.sin(a)*19.2;q.released=true;}
+  q.discPhase??='flight';let dx=p.x-q.x,dy=p.y-q.y,dist=Math.hypot(dx,dy);
+  if(q.discPhase==='flight'){let vx=q.vx-(p.vx||0),vy=q.vy-(p.vy||0),time=(dx*vx+dy*vy)/(vx*vx+vy*vy||1),miss=Math.hypot(dx-vx*Math.max(0,time),dy-vy*Math.max(0,time));
+   if(q.age>.15&&(time<0||miss>hullBound(p,true)+.5||q.age>1.8)){q.discPhase='braking';q.life=Math.min(q.life,32/24);}else q.life=Math.max(q.life,64/24);
+  }
+  if(q.discPhase==='braking'){let friction=Math.pow(.5,dt*24);q.vx*=friction;q.vy*=friction;if(Math.hypot(q.vx,q.vy)<.03){q.discPhase='mine';q.vx=q.vy=0;}}
+  if(q.discPhase==='mine'){q.trackClock=(q.trackClock||0)+dt;if(q.trackClock>=5/24){q.trackClock%=5/24;let a=Math.round(Math.atan2(dy,dx)/(TAU/16))*(TAU/16);q.vx=dist<224*4*.07/24?Math.cos(a)*.56:0;q.vy=dist<224*4*.07/24?Math.sin(a)*.56:0;}}
  }
+
  if(q.home){let a=Math.atan2(q.vy,q.vx),b=Math.atan2(p.y-q.y,p.x-q.x),delta=Math.atan2(Math.sin(b-a),Math.cos(b-a)),speed=Math.hypot(q.vx,q.vy);a+=Math.max(-q.home*dt,Math.min(q.home*dt,delta));if(q.kind==='bubble')a+=Math.sin(q.age*6+(q.source?.style||0))*dt*1.4;q.vx=Math.cos(a)*speed;q.vy=Math.sin(a)*speed;}
  if(q.kind==='crystal'&&!q.split){let dist=Math.hypot(q.x-p.x,q.y-p.y);if(dist<2.5||q.previousDistance<3.5&&dist>q.previousDistance||q.life<=dt){q.split=true;q.life=0;for(let i=0;i<8;i++)alienShot({x:q.x,y:q.y,a:0,style:q.source.style},'shard',i*TAU/8,2*alienPower(),19.2,8,{life:10/24,hp:1,radius:.1,source:q.source});}q.previousDistance=dist;}
  if(q.kind==='plasma'){let remaining=Math.max(0,1-q.age/q.maxLife),strength=Math.min(q.hp,Math.ceil(10*remaining));q.damage=strength*alienPower();q.radius=.65*Math.sqrt(Math.max(.1,strength/10));if(strength<=0)q.life=0;}
@@ -1133,6 +1147,7 @@ function stepAlienActors(dt){
  let e=encounter,p=e.player;e.fighterTrails??=[];for(let f of e.fighterTrails)f.age+=dt;e.fighterTrails=e.fighterTrails.filter(f=>f.age<3);
  for(let q of e.crewPods){q.age+=dt;q.x+=q.vx*dt;q.y+=q.vy*dt;q.vx*=Math.exp(-dt);q.vy*=Math.exp(-dt);let candidates=[{p,player:true},...e.ships.filter(m=>alienCrew(m)>0).map(p=>({p,player:false}))];for(let c of candidates)if(q.age>.3&&Math.hypot(c.p.x-q.x,c.p.y-q.y)<.8){if(c.player)p.hp=Math.min(p.max,p.hp+q.crew);else addAlienCrew(c.p,q.crew);q.age=q.life;break;}}e.crewPods=e.crewPods.filter(q=>q.age<q.life);
  for(let a of e.actors){a.age+=dt;if(a.age>=a.life||a.hp<=0)continue;if(a.owner&&alienCrew(a.owner)<=0){a.age=a.life;continue;}let dist=Math.hypot(p.x-a.x,p.y-a.y);
+  if(a.kind==='probeBolt'){a.clock+=dt;while(a.clock>=1/24&&a.segments<8&&!a.hit){a.clock-=1/24;let last=a.path[a.path.length-1],angle=Math.atan2(p.y-last.y,p.x-last.x)+Math.sin(a.segments*7+a.owner.a)*.2,step=a.range/8,next={x:last.x+Math.cos(angle)*step,y:last.y+Math.sin(angle)*step};a.path.push(next);a.segments++;if(hullSweep(p,last.x,last.y,next.x,next.y,.04,true)<Infinity){playerCrewDamage(a.damage);a.hit=true;}}let end=a.path[a.path.length-1];e.effects.push({kind:'lightning',x:a.path[0].x,y:a.path[0].y,x2:end.x,y2:end.y,path:a.path.map(q=>({...q})),color:'#b2caff',age:0,life:.06,seed:a.owner.a});continue;}
   if(a.kind==='ring'){let radius=a.radius*a.age/a.life;if(!a.hit&&dist<=radius){a.hit=true;if(a.song&&!dev.hp){let count=Math.floor(8*Math.max(0,1-dist/a.radius))+1,n=Math.max(0,Math.min(count*a.unit,p.hp-1));p.hp-=n;let pods=Math.min(9,Math.ceil(n/Math.max(.001,a.unit)));for(let i=0;i<pods;i++)e.crewPods.push({x:p.x,y:p.y,vx:Math.cos(i*TAU/pods),vy:Math.sin(i*TAU/pods),crew:n/pods,age:0,life:18});}else if(!a.song)playerCrewDamage(a.damage*(a.falloff?Math.max(0,1-dist/a.radius):1));}continue;}
   if(a.kind==='fire'){if(!a.hitPlayer&&dist<.65){a.hitPlayer=true;playerCrewDamage(a.damage);}continue;}
   if(a.kind==='satellite'){let angle=e.elapsed*2+a.index*TAU/3;a.x=a.owner.x+Math.cos(angle)*2;a.y=a.owner.y+Math.sin(angle)*2;a.a=angle;a.thrust=0;
@@ -1153,7 +1168,7 @@ function damageAlienFighter(a,damage,weapon){if(!a.targetable||a.age>=a.life||a.
 function drawThrusterPlume(x,y,width,length,power,t){if(!(power>.02))return;ctx.save();let pulse=.9+.08*Math.sin(t*.043+x*3)+.04*Math.sin(t*.097),reach=length*power*pulse,w=width*(.7+.3*power),bend=Math.sin(t*.037+x)*w*.16;ctx.translate(x,y);ctx.globalCompositeOperation='lighter';let glow=ctx.createLinearGradient(0,0,0,reach);glow.addColorStop(0,'rgba(205,250,255,.9)');glow.addColorStop(.18,'rgba(90,218,255,.75)');glow.addColorStop(.55,'rgba(45,127,245,.38)');glow.addColorStop(1,'rgba(32,85,230,0)');ctx.fillStyle=glow;ctx.shadowColor='#45bfff';ctx.shadowBlur=width*2;ctx.beginPath();ctx.moveTo(-w*.5,0);ctx.bezierCurveTo(-w*.65,reach*.2,-w*.23+bend,reach*.67,bend,reach);ctx.bezierCurveTo(w*.24+bend,reach*.68,w*.65,reach*.2,w*.5,0);ctx.closePath();ctx.fill();ctx.shadowBlur=0;let core=ctx.createLinearGradient(0,0,0,reach*.55);core.addColorStop(0,'#f0ffff');core.addColorStop(.3,'rgba(180,247,255,.9)');core.addColorStop(1,'rgba(70,191,255,0)');ctx.fillStyle=core;ctx.beginPath();ctx.ellipse(0,reach*.2,w*.22,reach*.32,0,0,TAU);ctx.fill();for(let i=0;i<3;i++){let f=((t*.0018+i*.33+x*.07)%1+1)%1;ctx.globalAlpha=(1-f)*.35;ctx.fillStyle='#89deff';ctx.beginPath();ctx.arc(bend*f+Math.sin(i*4+t*.009)*w*.16,reach*(.4+f*.75),w*.07,0,TAU);ctx.fill()}ctx.restore()}
 function drawAlienFighter(a,cx,cy,scale){ctx.save();ctx.translate(cx+a.x*scale,cy+a.y*scale);ctx.rotate(a.a+Math.PI/2);let z=scale*.18;ctx.scale(z,z);drawThrusterPlume(0,.38,.24,.95,a.thrust,simulationTime+a.index*97);let shade=ctx.createLinearGradient(-.45,0,.45,0);shade.addColorStop(0,'#6c1722');shade.addColorStop(.5,'#f96c69');shade.addColorStop(1,'#8c202b');ctx.fillStyle=shade;ctx.strokeStyle='#ff9990';ctx.lineWidth=.055;ctx.beginPath();ctx.moveTo(0,-.65);ctx.lineTo(.2,-.1);ctx.lineTo(.5,.32);ctx.lineTo(.26,.45);ctx.lineTo(0,.25);ctx.lineTo(-.26,.45);ctx.lineTo(-.5,.32);ctx.lineTo(-.2,-.1);ctx.closePath();ctx.fill();ctx.stroke();ctx.fillStyle='#e1a451';ctx.beginPath();ctx.moveTo(0,-.3);ctx.lineTo(.09,-.02);ctx.lineTo(0,.1);ctx.lineTo(-.09,-.02);ctx.closePath();ctx.fill();ctx.restore()}
 function drawFighterTrails(e,cx,cy,scale){ctx.save();ctx.globalCompositeOperation='lighter';for(let f of e.fighterTrails||[]){let fade=Math.max(0,1-f.age/3),r=scale*(.018+f.age*.012);ctx.globalAlpha=fade*fade*.65*f.power;ctx.fillStyle=f.age<.35?'#a5efff':'#398bdd';ctx.shadowColor='#45bfff';ctx.shadowBlur=scale*.045;ctx.beginPath();ctx.arc(cx+f.x*scale,cy+f.y*scale,r,0,TAU);ctx.fill()}ctx.restore()}
-function drawAlienActors(cx,cy,scale){let e=encounter;drawFighterTrails(e,cx,cy,scale);for(let q of e.harvestRocks||[]){if(q.life<=0)continue;ctx.fillStyle='#5a6572';ctx.beginPath();for(let j=0;j<7;j++){let a=j*TAU/7,r=(j%2?.3:.4)*scale;ctx.lineTo(cx+q.x*scale+Math.cos(a)*r,cy+q.y*scale+Math.sin(a)*r)}ctx.closePath();ctx.fill()}for(let q of e.crewPods){let x=cx+q.x*scale,y=cy+q.y*scale;ctx.fillStyle='#b7ffbd';ctx.beginPath();ctx.arc(x,y-2,2,0,TAU);ctx.fill();ctx.strokeStyle='#8cdc9d';ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x,y+4);ctx.moveTo(x-3,y+1);ctx.lineTo(x+3,y+1);ctx.stroke()}for(let a of e.actors){if(a.age>=a.life)continue;if(a.kind==='fighter'){drawAlienFighter(a,cx,cy,scale);continue}if(a.kind==='ring'||a.boarded)continue;if(a.kind==='fire'){drawWeaponSprite(23,cx+a.x*scale,cy+a.y*scale,scale*1.4,scale*1.4,0,Math.min(1,(a.life-a.age)/.5));continue;}if(a.kind==='drainer'){drawWeaponSprite(24,cx+a.x*scale,cy+a.y*scale,scale*.75,scale*.75,a.a);continue;}if(a.kind==='marine'){drawWeaponSprite(15,cx+a.x*scale,cy+a.y*scale,scale*.4,scale*.4,a.a);continue;}ctx.fillStyle=a.kind==='fire'?'#ff793e':a.kind==='marine'?'#e8c1ff':'#96d9ff';ctx.beginPath();ctx.arc(cx+a.x*scale,cy+a.y*scale,(a.kind==='fire'?.5*(1-a.age/a.life):a.kind==='marine'?.12:.2)*scale,0,TAU);ctx.fill()}}
+function drawAlienActors(cx,cy,scale){let e=encounter;drawFighterTrails(e,cx,cy,scale);for(let q of e.harvestRocks||[]){if(q.life<=0)continue;ctx.fillStyle='#5a6572';ctx.beginPath();for(let j=0;j<7;j++){let a=j*TAU/7,r=(j%2?.3:.4)*scale;ctx.lineTo(cx+q.x*scale+Math.cos(a)*r,cy+q.y*scale+Math.sin(a)*r)}ctx.closePath();ctx.fill()}for(let q of e.crewPods){let x=cx+q.x*scale,y=cy+q.y*scale;ctx.fillStyle='#b7ffbd';ctx.beginPath();ctx.arc(x,y-2,2,0,TAU);ctx.fill();ctx.strokeStyle='#8cdc9d';ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x,y+4);ctx.moveTo(x-3,y+1);ctx.lineTo(x+3,y+1);ctx.stroke()}for(let a of e.actors){if(a.age>=a.life)continue;if(a.kind==='fighter'){drawAlienFighter(a,cx,cy,scale);continue}if(a.kind==='ring'||a.kind==='probeBolt'||a.boarded)continue;if(a.kind==='fire'){drawWeaponSprite(23,cx+a.x*scale,cy+a.y*scale,scale*1.4,scale*1.4,0,Math.min(1,(a.life-a.age)/.5));continue;}if(a.kind==='drainer'){drawWeaponSprite(24,cx+a.x*scale,cy+a.y*scale,scale*.75,scale*.75,a.a);continue;}if(a.kind==='marine'){drawWeaponSprite(15,cx+a.x*scale,cy+a.y*scale,scale*.4,scale*.4,a.a);continue;}ctx.fillStyle=a.kind==='fire'?'#ff793e':a.kind==='marine'?'#e8c1ff':'#96d9ff';ctx.beginPath();ctx.arc(cx+a.x*scale,cy+a.y*scale,(a.kind==='fire'?.5*(1-a.age/a.life):a.kind==='marine'?.12:.2)*scale,0,TAU);ctx.fill()}}
 const PLAYER_WEAPON_COLORS=['#cbfff1','#f6cf6e','#7fe7c5','#ff9b6b','#b8efff','#b5abff','#ffd083','#78e8ff','#76caff','#f4a7df'];
 function drawPlayerSaws(ship,cx,cy,scale,t){const colors=PLAYER_WEAPON_COLORS;if(weaponOn(4)){let blades=Math.min(8,2+weaponFeature(4));for(let arm=0;arm<blades;arm++){let a=t*.00157+arm*TAU/blades,x=cx+(ship.x+Math.cos(a)*8)*scale,y=cy+(ship.y+Math.sin(a)*8)*scale;ctx.save();ctx.translate(x,y);ctx.rotate(a+t*.01);ctx.strokeStyle=colors[4];ctx.lineWidth=2;ctx.beginPath();for(let k=0;k<4;k++){let angle=k*Math.PI/2;ctx.moveTo(0,0);ctx.lineTo(Math.cos(angle)*7,Math.sin(angle)*7)}ctx.stroke();ctx.restore()}}}
 function drawPlayerThrusters(size,p,t){if(!(p.thrust>.02))return;for(let [x,y] of PLAYER_ENGINES)drawThrusterPlume(x*size,y*size,size*.12,size*.9,p.thrust,t+x*117)}
@@ -1186,7 +1201,7 @@ function drawMerchant(){updateCombatStats();let e=encounter;if(!e?.player)return
  drawCombatDebris(e,cx,cy,scale);drawAlienActors(cx,cy,scale);if(e.phase==='combat')drawPlayerSaws(e.player,cx,cy,scale,simulationTime);for(let d of e.combatDrones||[])drawPlayerDrone(d,cx,cy,scale);for(let shot of e.shots){if(!shot.enemy){drawPlayerProjectile(shot,cx,cy,scale,simulationTime);continue}drawAlienProjectile(shot,cx,cy,scale)}
  for(let f of e.effects){if(f.age<0)continue;if(drawAlienBeamEffect(f,cx,cy,scale))continue;if(f.kind==='nova'&&f.playerWeapon===7){drawPlayerNova({x:f.x2,y:f.y2,r:6*f.age/f.life},cx,cy,scale,simulationTime);continue}if(f.kind==='lightning'&&f.playerWeapon===8){drawLightningEffect(f,cx+f.x*scale,cy+f.y*scale,cx+f.x2*scale,cy+f.y2*scale,scale);continue}if(f.kind==='weaponCone'){ctx.save();ctx.globalAlpha=(1-f.age/f.life)*.45;ctx.fillStyle=f.color;ctx.shadowColor=f.color;ctx.shadowBlur=10;ctx.beginPath();ctx.moveTo(cx+f.x*scale,cy+f.y*scale);ctx.arc(cx+f.x*scale,cy+f.y*scale,f.radius*scale,f.a-.35,f.a+.35);ctx.closePath();ctx.fill();ctx.restore();continue}if(f.kind==='radio'){ctx.save();ctx.strokeStyle='#fff49c';ctx.beginPath();for(let j=0;j<15;j++){let x=cx+(f.x+(j-7)*.1)*scale,y=cy+(f.y-2+Math.sin(j*2+e.elapsed*20)*.2)*scale;if(!j)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();ctx.restore();continue}ctx.globalAlpha=1-f.age/f.life;ctx.strokeStyle=f.color||(f.kind==='star'?'#f6cf6e':f.kind==='saw'?'#b8efff':Number.isInteger(f.playerWeapon)?PLAYER_WEAPON_COLORS[f.playerWeapon]:f.kind==='lightning'?'#78baff':f.kind==='nova'?'#c388ff':'#baffee');ctx.lineWidth=1.5;ctx.beginPath();if(f.kind==='star'||f.kind==='saw'){let arms=f.kind==='star'?(f.arms||3):2;for(let j=0;j<arms;j++){let a=e.elapsed*(f.kind==='star'?TAU/9:2)+j*TAU/arms,r=(f.kind==='star'?(f.length||4):8)*scale;ctx.moveTo(cx+f.x*scale,cy+f.y*scale);ctx.lineTo(cx+f.x*scale+Math.cos(a)*r,cy+f.y*scale+Math.sin(a)*r)}}else if(f.kind==='nova'||f.kind==='burst'||f.kind==='mortarBlast'){ctx.arc(cx+(f.x2??f.x)*scale,cy+(f.y2??f.y)*scale,(f.radius||(f.kind==='nova'?6:f.kind==='mortarBlast'?5:1))*scale*f.age/f.life,0,TAU)}else{ctx.moveTo(cx+f.x*scale,cy+f.y*scale);if(f.kind==='lightning'){for(let j=1;j<8;j++)ctx.lineTo(cx+(f.x+(f.x2-f.x)*j/8+Math.sin(j*3+e.elapsed*60)*.2)*scale,cy+(f.y+(f.y2-f.y)*j/8)*scale)}ctx.lineTo(cx+f.x2*scale,cy+f.y2*scale)}ctx.stroke()}ctx.globalAlpha=1;ctx.textAlign='start';
 }
-function drawAlienThrusters(size,p,t){if(!(p.thrust>.02))return;let engines=ALIEN_ENGINES[(p.style??0)%25],boost=p.boostUntil>(encounter?.elapsed??Infinity)?1.5:1;for(let [x,y] of engines)drawThrusterPlume(x*size,y*size,size*.11,size*.85*boost,Math.min(1,p.thrust),t+x*117)}
+function drawAlienThrusters(size,p,t){if(!(p.thrust>.02))return;if(p.style===2){drawThrusterPlume(-.25*size,.16*size,size*.18,size*1.1,1,t);return;}let engines=ALIEN_ENGINES[(p.style??0)%25],boost=p.boostUntil>(encounter?.elapsed??Infinity)?1.5:1;for(let [x,y] of engines)drawThrusterPlume(x*size,y*size,size*.11,size*.85*boost,Math.min(1,p.thrust),t+x*117)}
 
 function drawCombatOutline(p,size,color,cx,cy,scale){ctx.save();ctx.translate(cx+p.x*scale,cy+p.y*scale);ctx.rotate(p.a+Math.PI/2);if(p===encounter.player){drawPlayerThrusters(size,p,simulationTime);drawShipHull(size,'player',p.a)}else if(encounter.phase==='combat'||encounter.phase==='aftermath'){drawAlienThrusters(size*alienSize(p.style),p,simulationTime+encounter.elapsed*1000)}ctx.restore()}
 let infoSystem=-1;
