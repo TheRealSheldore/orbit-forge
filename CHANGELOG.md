@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.9.53
+
+- Apply all 25 user-edited size multipliers independently of mass.
+- Apply Jade Caravan fighter launch range 30 blocks and return after 8 seconds.
+- Adapt timed thrust and at-speed direction changes from the uploaded UQM source.
+- Give Azure Bastion its continuous flight and reversal behavior.
+- Match evasion predictions to the movement integrator and make Jade Caravan pursue its target.
+
 ## 0.9.52
 
 - Scale alien hulls, hit areas and engine plumes by source ship mass, relative to player mass 4.
