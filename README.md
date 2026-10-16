@@ -9,10 +9,11 @@ Current version: **0.9.51**.
 From this folder, run:
 
 ```sh
+python tools/prepare.py
 python -m http.server 8000
 ```
 
-Open **http://localhost:8000** in your browser. The source game needs no package installation or build step. Progress saves in that browser. Tap the top status bar to open developer settings.
+Open **http://localhost:8000** in your browser. The preparation command joins the mining music parts without changing the audio. No package installation is needed. Progress saves in that browser. Tap the top status bar to open developer settings.
 
 ## Build a downloadable game
 

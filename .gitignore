@@ -1,0 +1,10 @@
+dist/
+__pycache__/
+*.py[cod]
+.DS_Store
+Thumbs.db
+*.log
+.env
+.env.*
+!.env.example
+assets/music/mining.wav

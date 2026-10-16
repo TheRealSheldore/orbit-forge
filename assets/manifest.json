@@ -1,0 +1,38 @@
+[
+  {
+    "path": "assets/music/mining.wav",
+    "mime": "audio/wav"
+  },
+  {
+    "path": "assets/music/merchant.wav",
+    "mime": "audio/wav"
+  },
+  {
+    "path": "assets/music/combat.wav",
+    "mime": "audio/wav"
+  },
+  {
+    "path": "assets/music/encounter.wav",
+    "mime": "audio/wav"
+  },
+  {
+    "path": "assets/music/alien.wav",
+    "mime": "audio/wav"
+  },
+  {
+    "path": "assets/images/ship-atlas.png",
+    "mime": "image/png"
+  },
+  {
+    "path": "assets/images/legacy-player.png",
+    "mime": "image/png"
+  },
+  {
+    "path": "assets/images/legacy-probe.svg",
+    "mime": "image/svg+xml"
+  },
+  {
+    "path": "assets/images/weapon-sprites.png",
+    "mime": "image/png"
+  }
+]
