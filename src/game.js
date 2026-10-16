@@ -1046,6 +1046,15 @@ function sourceCombatIntent(m){let e=encounter,p=e.player,cfg=ALIEN_SOURCE[m.sty
   if(kind!=='howitzer')thrust=dist>ballistics.range*.8&&alienFacing(aim,angle)<.4;
  }
  if(mode!=='AVOID'&&m.navPhase==='coast'&&Math.hypot(m.vx||0,m.vy||0)<motion.speed*.45&&!readyToAim){heading=aim;thrust=true;}
+ // Kohr-Ah has no arena wrap here. Do not let ENTICE become endless flight
+ // away from the pursuing player. Close, brake physically, and fight from range.
+ if(kind==='disc'){
+  let velocity=Math.hypot(m.vx||0,m.vy||0),radial=((m.vx||0)*dx+(m.vy||0)*dy)/(dist||1),engage=range*.78;
+  if(dist>engage+1){heading=aim;thrust=radial<motion.speed*.85;mode='PURSUE';m.navPhase='approach';}
+  else if(velocity>.35){heading=Math.atan2(-(m.vy||0),-(m.vx||0));thrust=true;mode='BRAKE';m.navPhase='brake';}
+  else {heading=aim;thrust=false;mode='ENGAGE';m.navPhase='engage';}
+  m.evadeUntil=0;
+ }
  if(kind==='bubble'&&m.blazerUntil>e.elapsed){heading=angle;thrust=true}
  if(kind==='torch'&&m.boostUntil>e.elapsed){heading=m.boostHeading??m.a;thrust=true}
  if(kind==='particle'&&e.crewPods.length){let q=e.crewPods.reduce((a,b)=>Math.hypot(a.x-m.x,a.y-m.y)<Math.hypot(b.x-m.x,b.y-m.y)?a:b);heading=Math.atan2(q.y-m.y,q.x-m.x);thrust=true}
