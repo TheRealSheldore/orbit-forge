@@ -827,7 +827,7 @@ function flySourceAlien(p,wantX,wantY,speed,turn,dt){
    if(behind&&!p.probeReverseHeld)p.a+=Math.PI;p.probeReverseHeld=behind;}
   let slice=Math.min(remaining,1/24-p.sourceClock),delta=Math.atan2(Math.sin(bearing-p.a),Math.cos(bearing-p.a));
   p.steering=Math.sign(delta);p.a+=Math.max(-turn*slice,Math.min(turn*slice,delta));
-  let thrust=!(p.collisionWait>(encounter?.elapsed??-1))&&(p.style===2||p.aiThrust===true||p.aiThrust!==false&&error>.08&&Math.cos(bearing-p.a)>.97);p.thrust=thrust?1:0;
+  let thrust=!(p.collisionWait>(encounter?.elapsed??-1))&&(p.style===2||p.aiThrust!==false&&error>.08&&Math.cos(bearing-p.a)>(p.thrust?.88:.96));p.thrust=thrust?1:0;
   // Update thrust at the source's 24 Hz clock; turning alone does not alter momentum.
   if(p.sourceClock<1e-9){
    if(p.sourceThrustWait>0)p.sourceThrustWait--;
@@ -953,6 +953,9 @@ function alienSecondary(m,dt,dist,angle,threat){
  }
  if(used)m.specialAt=e.elapsed;
 }
+// Primary trajectories share the same numbers used by the projectile spawner.
+function alienBallistics(m){let kind=ALIEN_COMBAT[m.style][6],speed={fusion:24,disc:19.2,plasma:9.6,howitzer:36,crystal:19.2,globule:36,flame:7.5,mass:36,bubble:9.6,missile:12,particle:36,spray:12,torch:36,dart:28.8,rear:36,battery:36,twin:24,triple:28.8,charge:54}[kind]||0,frames={fusion:20,disc:64,plasma:143,howitzer:12,crystal:90,globule:10,flame:8,mass:20,bubble:200,missile:60,particle:10,spray:10,torch:15,dart:10,rear:10,battery:10,twin:10,triple:5,charge:10}[kind]||0,homing=['plasma','bubble','missile','disc'].includes(kind);if(kind==='transform'){speed=m.fastForm?24:0;frames=m.fastForm?40:0;homing=!!m.fastForm;}let range=kind==='transform'?(m.fastForm?40:6.25):ALIEN_COMBAT[m.style][5];return {kind,speed,life:frames/24,homing,range:speed&&!homing?Math.min(range,speed*frames/24+alienRadius(m)):range};}
+function alienInterceptAim(m,target=encounter.player){let shot=alienBallistics(m),dx=target.x-m.x,dy=target.y-m.y,vx=target.vx||0,vy=target.vy||0,t=0;if(shot.speed&&!shot.homing){let aa=vx*vx+vy*vy-shot.speed**2,bb=2*(dx*vx+dy*vy),cc=dx*dx+dy*dy,disc=bb*bb-4*aa*cc;if(Math.abs(aa)<1e-8){if(bb<0)t=-cc/bb;}else if(disc>=0){let roots=[(-bb-Math.sqrt(disc))/(2*aa),(-bb+Math.sqrt(disc))/(2*aa)].filter(x=>x>=0);if(roots.length)t=Math.min(...roots);}t=Math.min(t,shot.life||2);}return Math.atan2(dy+vy*t,dx+vx*t);}
 function alienFirePrimary(m,dist,angle){
  let e=encounter,p=e.player,cfg=ALIEN_SOURCE[m.style],kind=ALIEN_COMBAT[m.style][6],range=ALIEN_COMBAT[m.style][5],power=alienPower(),damage=cfg.damage*power;
  if(m.phaseUntil>e.elapsed||kind==='bubble'&&m.blazerUntil>e.elapsed||kind==='flame'&&m.cloakUntil>e.elapsed&&dist>range)return false;
@@ -961,7 +964,7 @@ function alienFirePrimary(m,dist,angle){
  if(kind==='transform'){actual=m.fastForm?'xmissile':'xlaser';range=m.fastForm?40:6.25;}
  let error=alienFacing(angle,aim),auto=['lightning','laser'].includes(actual);
  if(dist>range||(!auto&&actual!=='triple'&&error>.25))return false;
- if(!auto&&['fusion','battery','twin','mass','particle','dart','torch','xlaser'].includes(actual)){let velocity=actual==='mass'?28:24,time=dist/velocity,px=p.x+(p.vx||0)*time,py=p.y+(p.vy||0)*time,across=Math.abs((px-m.x)*Math.sin(aim)-(py-m.y)*Math.cos(aim));if(across>hullBound(p,true)+.18)return false;}if(kind==='cone'&&m.rechargeCone)return false;
+ if(!auto&&!alienBallistics(m).homing&&!['triple','spray','cone','bubble'].includes(actual)){let tolerance=Math.atan2(hullBound(p,true)+.18,Math.max(.1,dist));if(alienFacing(alienInterceptAim(m),aim)>Math.max(.04,tolerance))return false;}if(kind==='cone'&&m.rechargeCone)return false;
  if(kind==='laser'&&m.reserveJump&&m.energy<m.energyMax)return false;
  if(kind==='crystal'&&e.shots.some(q=>q.source===m&&q.kind==='crystal'&&q.life>0))return false;
  if(kind==='disc'&&e.shots.filter(q=>q.source===m&&q.kind==='disc'&&q.life>0).length>=8)return false;
@@ -992,7 +995,7 @@ function alienFirePrimary(m,dist,angle){
 }
 
 // UQM concern states: intercept the enemy, entice it into range, or evade an incoming shot.
-function sourceCombatIntent(m){let e=encounter,p=e.player,cfg=ALIEN_SOURCE[m.style],kind=ALIEN_COMBAT[m.style][6],motion=alienMotion(m.style,m),dx=p.x-m.x,dy=p.y-m.y,dist=Math.hypot(dx,dy),angle=Math.atan2(dy,dx),range=ALIEN_COMBAT[m.style][5],speed=kind==='mass'?28:kind==='fusion'?18:24,lead=Math.min(2,dist/speed),aim=Math.atan2(dy+(p.vy||0)*lead,dx+(p.vx||0)*lead),rvx=(p.vx||0)-(m.vx||0),rvy=(p.vy||0)-(m.vy||0),closing=-(dx*rvx+dy*rvy)/(dist||1),threats=alienThreat(m,1.25),threat=threats[0],turns=Math.max(1,dist/(64*.07/24));
+function sourceCombatIntent(m){let e=encounter,p=e.player,cfg=ALIEN_SOURCE[m.style],kind=ALIEN_COMBAT[m.style][6],motion=alienMotion(m.style,m),dx=p.x-m.x,dy=p.y-m.y,dist=Math.hypot(dx,dy),angle=Math.atan2(dy,dx),range=alienBallistics(m).range,speed=kind==='mass'?28:kind==='fusion'?18:24,lead=Math.min(2,dist/speed),aim=alienInterceptAim(m),rvx=(p.vx||0)-(m.vx||0),rvy=(p.vy||0)-(m.vy||0),closing=-(dx*rvx+dy*rvy)/(dist||1),threats=alienThreat(m,1.25),threat=threats[0],turns=Math.max(1,dist/(64*.07/24));
  let mode=(range<6||motion.speed<shipSpeed()&&range<12)?'PURSUE':'ENTICE',heading=aim,thrust=dist>range*.72,fire=true,special=true;
  switch(m.style){
  case 0:mode='PURSUE';special=dist<cfg.fighterLaunchRange&&alienCrew(m)>m.crewMax/4;break;
@@ -1001,12 +1004,12 @@ function sourceCombatIntent(m){let e=encounter,p=e.player,cfg=ALIEN_SOURCE[m.sty
  case 3:special=dist>2.24;break;
  case 4:case 22:mode='PURSUE';special=!!threat;break;
  case 5:heading=angle+Math.PI;thrust=dist<range*.8;special=alienFacing(angle,m.a+Math.PI)<1;break;
- case 6:fire=m.energy>=cfg.mainCost&&(dist<range*.8||alienCrew(m)>=m.crewMax);special=!fire&&alienCrew(m)<m.crewMax;break;
+ case 6:fire=m.energy>=cfg.mainEnergy&&(dist<range*.8||alienCrew(m)>=m.crewMax);special=!fire&&alienCrew(m)<m.crewMax;break;
  case 7:special=alienCrew(m)>m.crewMax/4&&(!fire||alienCount(m,'marine')<2);break;
  case 8:special=m.energy>=m.energyMax;break;
  case 9:break;
  case 10:mode='PURSUE';special=dist>4;break;
- case 11:mode='ENTICE';thrust=dist>range;special=m.energy<cfg.mainCost;break;
+ case 11:mode='ENTICE';thrust=dist>range;special=m.energy<cfg.mainEnergy;break;
  case 12:mode=m.energy<25&&m.chargeAt==null?'ENTICE':'PURSUE';special=alienFacing(aim,m.a)<.18;break;
  case 13:special=m.energy>=m.energyMax;break;
  case 14:break;
@@ -1020,11 +1023,19 @@ function sourceCombatIntent(m){let e=encounter,p=e.player,cfg=ALIEN_SOURCE[m.sty
  case 23:mode='ENTICE';special=!!threat;break;
  case 24:special=dist<3&&alienCrew(m)<m.crewStarting*.35;break;
  }
- if(mode==='PURSUE'){heading=aim;thrust=dist>Math.max(1,range*.42)||closing<-.5;}
- else if(m.style!==5&&m.style!==11){if(dist<range*.38){heading=angle+Math.PI;thrust=true}else{heading=aim;thrust=dist>range*.85&&closing<motion.speed*.6}}
- if(threat&&![3,4,17,22].includes(m.style)&&!(m.style===10&&dist<4)&&!(m.style===15&&m.blazerUntil>e.elapsed)){
-  let side=Math.sin(Math.atan2(threat.vy||0,threat.vx||0)-Math.atan2(m.y-threat.y,m.x-threat.x))>=0?1:-1;heading=Math.atan2(threat.vy||0,threat.vx||0)+side*Math.PI/2;thrust=true;mode='AVOID';
+ let inner=Math.max(hullBound(m)+hullBound(p,true)+.5,range*.35),outer=Math.max(inner+1,range*.8);
+ if(m.style!==5&&m.style!==11){
+  if(dist>outer+1)m.navPhase='approach';else if(dist<inner)m.navPhase='withdraw';else if(m.navPhase==='approach'&&dist<outer||m.navPhase==='withdraw'&&dist>inner+1.5)m.navPhase='coast';
+  m.navPhase??='approach';
+  if(mode==='PURSUE'&&dist>inner+1){m.navPhase='approach';}
+  if(m.navPhase==='approach'){let horizon=Math.min(1.5,dist/Math.max(.5,motion.speed)),wantX=dx/(dist||1)*motion.speed+(p.vx||0)*.5,wantY=dy/(dist||1)*motion.speed+(p.vy||0)*.5;heading=Math.atan2(wantY-(m.vy||0),wantX-(m.vx||0));thrust=true;if(dist<outer&&closing>0){heading=aim;thrust=false;}}
+  else if(m.navPhase==='withdraw'){let wantX=-dx/(dist||1)*motion.speed,wantY=-dy/(dist||1)*motion.speed;heading=Math.atan2(wantY-(m.vy||0),wantX-(m.vx||0));thrust=true;}
+  else {heading=aim;thrust=false;}
  }
+ if(threat&&![3,4,17,22].includes(m.style)&&!(m.style===10&&dist<4)&&!(m.style===15&&m.blazerUntil>e.elapsed)){
+  if(!(m.evadeUntil>e.elapsed)){let dodge=combatEvasion(m,false,motion.speed,motion.turn);m.evadeHeading=dodge??aim;m.evadeUntil=e.elapsed+.4;}
+  heading=m.evadeHeading;thrust=true;mode='AVOID';
+ }else if(m.evadeUntil>e.elapsed&&![3,4,17,22].includes(m.style)){heading=m.evadeHeading;thrust=true;mode='AVOID';}
  if(kind==='bubble'&&m.blazerUntil>e.elapsed){heading=angle;thrust=true}
  if(kind==='torch'&&m.boostUntil>e.elapsed){heading=m.boostHeading??m.a;thrust=true}
  if(kind==='particle'&&e.crewPods.length){let q=e.crewPods.reduce((a,b)=>Math.hypot(a.x-m.x,a.y-m.y)<Math.hypot(b.x-m.x,b.y-m.y)?a:b);heading=Math.atan2(q.y-m.y,q.x-m.x);thrust=true}
@@ -1034,23 +1045,24 @@ function sourceCombatIntent(m){let e=encounter,p=e.player,cfg=ALIEN_SOURCE[m.sty
 
 function stepAlienCombatBase(m,dt){
  let e=encounter,p=e.player,cfg=ALIEN_SOURCE[m.style],kind=ALIEN_COMBAT[m.style][6],motion=alienMotion(m.style,m);
- alienEnergyStep(m,dt);if(kind==='cone'){if(m.energy<=3)m.rechargeCone=true;if(m.energy>=m.energyMax)m.rechargeCone=false;}let dist=Math.hypot(p.x-m.x,p.y-m.y),angle=Math.atan2(p.y-m.y,p.x-m.x),lead=dist/24,aim=Math.atan2(p.y+(p.vy||0)*lead-m.y,p.x+(p.vx||0)*lead-m.x),threat=alienThreat(m,1.5).length>0;
+ alienEnergyStep(m,dt);if(kind==='cone'){if(m.energy<=3)m.rechargeCone=true;if(m.energy>=m.energyMax)m.rechargeCone=false;}let dist=Math.hypot(p.x-m.x,p.y-m.y),angle=Math.atan2(p.y-m.y,p.x-m.x),lead=dist/24,aim=alienInterceptAim(m),threat=alienThreat(m,1.5).length>0;
  if(kind==='laser'){if(threat)m.reserveJump=true;if(m.energy>=m.energyMax)m.reserveJump=false;}
  if(kind==='howitzer'){let delta=Math.atan2(Math.sin(aim-(m.turretAngle??m.a)),Math.cos(aim-(m.turretAngle??m.a)));m.turretAngle=(m.turretAngle??m.a)+Math.max(-2.356*dt,Math.min(2.356*dt,delta));}
- sourceCombatIntent(m);alienSecondary(m,dt,dist,angle,threat);
+ let intent=sourceCombatIntent(m);alienSecondary(m,dt,dist,angle,threat);
  if(m.phaseUntil>e.elapsed){m.thrust=0;return;}
- let intent=sourceCombatIntent(m),travel=intent.heading;
+ let travel=intent.heading;
  let evade=m.aiMode==='AVOID'?travel:null;
  if(kind==='globule'&&evade!==null){let delta=Math.atan2(Math.sin(aim-m.a),Math.cos(aim-m.a));m.a+=Math.max(-motion.turn*dt,Math.min(motion.turn*dt,delta));m.vx=(m.vx||0)+Math.cos(travel)*motion.acceleration*dt;m.vy=(m.vy||0)+Math.sin(travel)*motion.acceleration*dt;let speed=Math.hypot(m.vx,m.vy);if(speed>motion.speed){m.vx*=motion.speed/speed;m.vy*=motion.speed/speed;}m.x+=m.vx*dt;m.y+=m.vy*dt;m.thrust=1;}
  else if(kind==='cone'&&m.retroUntil>e.elapsed){m.vx=-Math.cos(m.a)*12;m.vy=-Math.sin(m.a)*12;m.x+=m.vx*dt;m.y+=m.vy*dt;m.thrust=0;}
  else flyAlien(m,Math.cos(travel)*motion.speed,Math.sin(travel)*motion.speed,motion.speed,motion.turn,dt,aim);
  // Energy-absorbing and deflecting interception replaces source shields by design.
  if(m.deflectUntil>e.elapsed)alienIntercept(m,2.5,kind==='battery');
- dist=Math.hypot(p.x-m.x,p.y-m.y);aim=Math.atan2(p.y+(p.vy||0)*dist/24-m.y,p.x+(p.vx||0)*dist/24-m.x);
+ dist=Math.hypot(p.x-m.x,p.y-m.y);aim=alienInterceptAim(m);
  let cooldown=((kind==='transform'&&m.fastForm?20:cfg.mainWait)+1)/24;
  m.nextFire??=e.elapsed;
  if(m.chargeAt!=null){alienFirePrimary(m,dist,aim);m.nextFire=e.elapsed+cooldown;}
- else if(m.aiFire!==false&&e.elapsed+1e-8>=m.nextFire){let debt=Math.min(8,1+Math.floor((e.elapsed-m.nextFire)/cooldown));for(let i=0;i<debt;i++){if(!alienFirePrimary(m,dist,aim)){m.nextFire=e.elapsed+cooldown;break;}m.nextFire+=cooldown;}}
+ else if(m.aiFire!==false&&e.elapsed+1e-8>=m.nextFire){m.nextFire=e.elapsed+(alienFirePrimary(m,dist,aim)?cooldown:1/24);}
+
 }
 
 function combatEvasion(p,enemyShots,speed,turn){
@@ -1075,7 +1087,8 @@ function combatEvasion(p,enemyShots,speed,turn){
  if(score>bestScore){bestScore=score;best=heading;}}
  p.evadeHeading=best;p.evadeUntil=e.elapsed+.45;return best;
 }
-function alienThreat(m,seconds){return encounter.shots.filter(q=>!q.enemy&&q.life>0&&(()=>{let vx=q.vx-(m.vx||0),vy=q.vy-(m.vy||0),x=q.x-m.x,y=q.y-m.y,t=Math.max(0,Math.min(seconds,-(x*vx+y*vy)/(vx*vx+vy*vy||1)));return Math.hypot(x+vx*t,y+vy*t)<alienRadius(m)+(q.radius||.12)})())}
+function alienThreat(m,seconds){return encounter.shots.filter(q=>!q.enemy&&q.life>0&&q.weapon!==3&&q.weapon!==9).map(q=>{let vx=q.vx-(m.vx||0),vy=q.vy-(m.vy||0),x=q.x-m.x,y=q.y-m.y,vv=vx*vx+vy*vy,t=vv>1e-8?-(x*vx+y*vy)/vv:Infinity;return {q,t,miss:Math.hypot(x+vx*t,y+vy*t)};}).filter(v=>v.t>=0&&v.t<=Math.min(seconds,v.q.life)&&v.miss<alienRadius(m)+(v.q.radius||.12)).sort((a,b)=>a.t-b.t).map(v=>v.q)}
+
 function stepAlienCombat(m,dt){let e=encounter;if(m.gloryAt){m.thrust=0;if(e.elapsed>=m.gloryAt){alienRing(m,'#fff7c3',9,18*alienPower());e.actors[e.actors.length-1].falloff=true;setAlienCrew(m,0);m.suicide=true;explodeAlienHull(m);}return;}stepAlienCombatBase(m,dt);}
 
 function drawAlienProjectile(q,cx,cy,z){
