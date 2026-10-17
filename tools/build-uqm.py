@@ -14,7 +14,7 @@ def build():
         with zipfile.ZipFile(archive()) as source: source.extractall(stage)
         src=Path(stage)/'src'
         files=[src/'uqm'/n for n in 'cyborg.c ship.c weapon.c collide.c velocity.c trans.c displist.c misc.c tactrans.c gravity.c'.split()]
-        files += [src/'uqm/ships'/race/(race+'.c') for race in races]
+        files += [src/'uqm/ships'/race/(race+'.c') for race in races if race!='arilou']
         files += [src/'libs'/n for n in ['math/random.c','math/sqrt.c','graphics/intersec.c','graphics/boxint.c']]
         files += sorted((ROOT/'native/uqm').glob('*.c'))
         output=ROOT/'assets/engine/uqm.wasm';output.parent.mkdir(parents=True,exist_ok=True)

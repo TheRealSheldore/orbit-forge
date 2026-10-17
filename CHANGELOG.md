@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.9.60
+
+- Hide the original red ion trail in favour of the existing blue thrusters.
+- Counter momentum when piloting the player ship and match its moving target.
+- Smooth displayed combat positions between native ticks.
+- Track alien positions continuously in a larger arena and have distant ships fly back under thrust, without screen-wrap jumps.
+
 ## 0.9.59
 
 - Smooth player and alien hull rotation between native combat turns, including their thrusters.
