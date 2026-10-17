@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.9.58
+
+- Execute all 25 original UQM ship modules, tactical AI, movement, weapons, energy, and collision callbacks in WebAssembly.
+- Preserve native ship defenses for player weapon hits and original secondary entities.
+- Use source movement during alien arrival and departure. Remove alien hit-block graphics.
+- Keep one post-battle report, then let surviving aliens leave without targeting the player.
+- Include corresponding source, a reproducible native build, and attribution/license notices.
+
 ## 0.9.53
 
 - Apply all 25 user-edited size multipliers independently of mass.

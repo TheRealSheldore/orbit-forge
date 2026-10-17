@@ -34,5 +34,9 @@
   {
     "path": "assets/images/weapon-sprites.png",
     "mime": "image/png"
+  },
+  {
+    "path": "assets/engine/uqm.wasm",
+    "mime": "application/wasm"
   }
 ]

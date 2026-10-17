@@ -49,4 +49,5 @@ The player makes upgrade and equipment decisions while the ship mines automatica
 
 Ring blocks break in one hit, award one credit, and have a ten-percent chance to drop one Copper or Silver. The first universe change unlocks at planet four.
 
-Alien combat draws on researched Star Control II / The Ur-Quan Masters mechanics, with deliberate Orbit Forge changes. See the versioned combat audit in `docs/` for sources and differences. That audit records v0.9.47; later changes are listed in the changelog.
+Alien combat runs the original UQM C ship routines through WebAssembly. See [native/README.md](native/README.md) for the build, source, licenses, and the boundary between UQM combat and Orbit Forge presentation/player equipment.
+

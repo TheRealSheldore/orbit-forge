@@ -1,0 +1,1097 @@
+[
+  {
+    "key": "graphics.asteroid.large",
+    "path": "base/battle/asteroid-big.ani",
+    "count": 21
+  },
+  {
+    "key": "graphics.asteroid.medium",
+    "path": "base/battle/asteroid-med.ani",
+    "count": 21
+  },
+  {
+    "key": "graphics.asteroid.small",
+    "path": "base/battle/asteroid-sml.ani",
+    "count": 21
+  },
+  {
+    "key": "graphics.blast.large",
+    "path": "base/battle/blast-big.ani",
+    "count": 8
+  },
+  {
+    "key": "graphics.blast.medium",
+    "path": "base/battle/blast-med.ani",
+    "count": 8
+  },
+  {
+    "key": "graphics.blast.small",
+    "path": "base/battle/blast-sml.ani",
+    "count": 8
+  },
+  {
+    "key": "graphics.boom.large",
+    "path": "base/battle/boom-big.ani",
+    "count": 9
+  },
+  {
+    "key": "graphics.boom.medium",
+    "path": "base/battle/boom-med.ani",
+    "count": 9
+  },
+  {
+    "key": "graphics.boom.small",
+    "path": "base/battle/boom-sml.ani",
+    "count": 9
+  },
+  {
+    "key": "graphics.planets",
+    "path": "base/nav/planets.ani",
+    "count": 96
+  },
+  {
+    "key": "graphics.stars",
+    "path": "base/battle/stars.ani",
+    "count": 3
+  },
+  {
+    "key": "ship.androsynth.graphics.blazer.large",
+    "path": "base/ships/androsynth/blazer-big.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.androsynth.graphics.blazer.medium",
+    "path": "base/ships/androsynth/blazer-med.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.androsynth.graphics.blazer.small",
+    "path": "base/ships/androsynth/blazer-sml.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.androsynth.graphics.bubble.large",
+    "path": "base/ships/androsynth/bubble-big.ani",
+    "count": 3
+  },
+  {
+    "key": "ship.androsynth.graphics.bubble.medium",
+    "path": "base/ships/androsynth/bubble-med.ani",
+    "count": 3
+  },
+  {
+    "key": "ship.androsynth.graphics.bubble.small",
+    "path": "base/ships/androsynth/bubble-sml.ani",
+    "count": 3
+  },
+  {
+    "key": "ship.androsynth.graphics.guardian.large",
+    "path": "base/ships/androsynth/guardian-big.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.androsynth.graphics.guardian.medium",
+    "path": "base/ships/androsynth/guardian-med.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.androsynth.graphics.guardian.small",
+    "path": "base/ships/androsynth/guardian-sml.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.arilou.graphics.skiff.large",
+    "path": "base/ships/arilou/skiff-big.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.arilou.graphics.skiff.medium",
+    "path": "base/ships/arilou/skiff-med.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.arilou.graphics.skiff.small",
+    "path": "base/ships/arilou/skiff-sml.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.arilou.graphics.warp.large",
+    "path": "base/ships/arilou/warp-big.ani",
+    "count": 2
+  },
+  {
+    "key": "ship.arilou.graphics.warp.medium",
+    "path": "base/ships/arilou/warp-med.ani",
+    "count": 2
+  },
+  {
+    "key": "ship.arilou.graphics.warp.small",
+    "path": "base/ships/arilou/warp-sml.ani",
+    "count": 2
+  },
+  {
+    "key": "ship.chenjesu.graphics.broodhome.large",
+    "path": "base/ships/chenjesu/broodhome-big.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.chenjesu.graphics.broodhome.medium",
+    "path": "base/ships/chenjesu/broodhome-med.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.chenjesu.graphics.broodhome.small",
+    "path": "base/ships/chenjesu/broodhome-sml.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.chenjesu.graphics.doggy.large",
+    "path": "base/ships/chenjesu/doggy-big.ani",
+    "count": 7
+  },
+  {
+    "key": "ship.chenjesu.graphics.doggy.medium",
+    "path": "base/ships/chenjesu/doggy-med.ani",
+    "count": 7
+  },
+  {
+    "key": "ship.chenjesu.graphics.doggy.small",
+    "path": "base/ships/chenjesu/doggy-sml.ani",
+    "count": 7
+  },
+  {
+    "key": "ship.chenjesu.graphics.spark.large",
+    "path": "base/ships/chenjesu/spark-big.ani",
+    "count": 11
+  },
+  {
+    "key": "ship.chenjesu.graphics.spark.medium",
+    "path": "base/ships/chenjesu/spark-med.ani",
+    "count": 11
+  },
+  {
+    "key": "ship.chenjesu.graphics.spark.small",
+    "path": "base/ships/chenjesu/spark-sml.ani",
+    "count": 11
+  },
+  {
+    "key": "ship.chmmr.graphics.avatar.large",
+    "path": "base/ships/chmmr/avatar-big.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.chmmr.graphics.avatar.medium",
+    "path": "base/ships/chmmr/avatar-med.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.chmmr.graphics.avatar.small",
+    "path": "base/ships/chmmr/avatar-sml.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.chmmr.graphics.muzzle.large",
+    "path": "base/ships/chmmr/muzzle-big.ani",
+    "count": 41
+  },
+  {
+    "key": "ship.chmmr.graphics.muzzle.medium",
+    "path": "base/ships/chmmr/muzzle-med.ani",
+    "count": 41
+  },
+  {
+    "key": "ship.chmmr.graphics.muzzle.small",
+    "path": "base/ships/chmmr/muzzle-sml.ani",
+    "count": 41
+  },
+  {
+    "key": "ship.chmmr.graphics.satellite.large",
+    "path": "base/ships/chmmr/satellite-big.ani",
+    "count": 8
+  },
+  {
+    "key": "ship.chmmr.graphics.satellite.medium",
+    "path": "base/ships/chmmr/satellite-med.ani",
+    "count": 8
+  },
+  {
+    "key": "ship.chmmr.graphics.satellite.small",
+    "path": "base/ships/chmmr/satellite-sml.ani",
+    "count": 8
+  },
+  {
+    "key": "ship.druuge.graphics.cannon.large",
+    "path": "base/ships/druuge/cannon-big.ani",
+    "count": 24
+  },
+  {
+    "key": "ship.druuge.graphics.cannon.medium",
+    "path": "base/ships/druuge/cannon-med.ani",
+    "count": 24
+  },
+  {
+    "key": "ship.druuge.graphics.cannon.small",
+    "path": "base/ships/druuge/cannon-sml.ani",
+    "count": 24
+  },
+  {
+    "key": "ship.druuge.graphics.mauler.large",
+    "path": "base/ships/druuge/mauler-big.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.druuge.graphics.mauler.medium",
+    "path": "base/ships/druuge/mauler-med.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.druuge.graphics.mauler.small",
+    "path": "base/ships/druuge/mauler-sml.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.earthling.graphics.human.large",
+    "path": "base/ships/human/cruiser-big.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.earthling.graphics.human.medium",
+    "path": "base/ships/human/cruiser-med.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.earthling.graphics.human.small",
+    "path": "base/ships/human/cruiser-sml.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.earthling.graphics.saturn.large",
+    "path": "base/ships/human/saturn-big.ani",
+    "count": 25
+  },
+  {
+    "key": "ship.earthling.graphics.saturn.medium",
+    "path": "base/ships/human/saturn-med.ani",
+    "count": 25
+  },
+  {
+    "key": "ship.earthling.graphics.saturn.small",
+    "path": "base/ships/human/saturn-sml.ani",
+    "count": 25
+  },
+  {
+    "key": "ship.flagship.graphics.blaster.large",
+    "path": "base/ships/flagship/blaster-big.ani",
+    "count": 27
+  },
+  {
+    "key": "ship.flagship.graphics.blaster.medium",
+    "path": "base/ships/flagship/blaster-med.ani",
+    "count": 27
+  },
+  {
+    "key": "ship.flagship.graphics.blaster.small",
+    "path": "base/ships/flagship/blaster-sml.ani",
+    "count": 27
+  },
+  {
+    "key": "ship.flagship.graphics.flagship.large",
+    "path": "base/ships/flagship/flagship-big.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.flagship.graphics.flagship.medium",
+    "path": "base/ships/flagship/flagship-med.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.flagship.graphics.flagship.small",
+    "path": "base/ships/flagship/flagship-sml.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.flagship.graphics.hyperspace",
+    "path": "base/ships/flagship/hyperspace.ani",
+    "count": 34
+  },
+  {
+    "key": "ship.ilwrath.graphics.avenger.large",
+    "path": "base/ships/ilwrath/avenger-big.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.ilwrath.graphics.avenger.medium",
+    "path": "base/ships/ilwrath/avenger-med.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.ilwrath.graphics.avenger.small",
+    "path": "base/ships/ilwrath/avenger-sml.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.ilwrath.graphics.fire.large",
+    "path": "base/ships/ilwrath/fire-big.ani",
+    "count": 8
+  },
+  {
+    "key": "ship.ilwrath.graphics.fire.medium",
+    "path": "base/ships/ilwrath/fire-med.ani",
+    "count": 8
+  },
+  {
+    "key": "ship.ilwrath.graphics.fire.small",
+    "path": "base/ships/ilwrath/fire-sml.ani",
+    "count": 8
+  },
+  {
+    "key": "ship.kohrah.graphics.buzzsaw.large",
+    "path": "base/ships/kohrah/buzzsaw-big.ani",
+    "count": 8
+  },
+  {
+    "key": "ship.kohrah.graphics.buzzsaw.medium",
+    "path": "base/ships/kohrah/buzzsaw-med.ani",
+    "count": 8
+  },
+  {
+    "key": "ship.kohrah.graphics.buzzsaw.small",
+    "path": "base/ships/kohrah/buzzsaw-sml.ani",
+    "count": 8
+  },
+  {
+    "key": "ship.kohrah.graphics.gas.large",
+    "path": "base/ships/kohrah/gas-big.ani",
+    "count": 8
+  },
+  {
+    "key": "ship.kohrah.graphics.gas.medium",
+    "path": "base/ships/kohrah/gas-med.ani",
+    "count": 8
+  },
+  {
+    "key": "ship.kohrah.graphics.gas.small",
+    "path": "base/ships/kohrah/gas-sml.ani",
+    "count": 8
+  },
+  {
+    "key": "ship.kohrah.graphics.marauder.large",
+    "path": "base/ships/kohrah/marauder-big.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.kohrah.graphics.marauder.medium",
+    "path": "base/ships/kohrah/marauder-med.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.kohrah.graphics.marauder.small",
+    "path": "base/ships/kohrah/marauder-sml.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.melnorme.graphics.confuse.large",
+    "path": "base/ships/melnorme/confuse-big.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.melnorme.graphics.confuse.medium",
+    "path": "base/ships/melnorme/confuse-med.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.melnorme.graphics.confuse.small",
+    "path": "base/ships/melnorme/confuse-sml.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.melnorme.graphics.pumpup.large",
+    "path": "base/ships/melnorme/pumpup-big.ani",
+    "count": 26
+  },
+  {
+    "key": "ship.melnorme.graphics.pumpup.medium",
+    "path": "base/ships/melnorme/pumpup-med.ani",
+    "count": 26
+  },
+  {
+    "key": "ship.melnorme.graphics.pumpup.small",
+    "path": "base/ships/melnorme/pumpup-sml.ani",
+    "count": 26
+  },
+  {
+    "key": "ship.melnorme.graphics.trader.large",
+    "path": "base/ships/melnorme/trader-big.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.melnorme.graphics.trader.medium",
+    "path": "base/ships/melnorme/trader-med.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.melnorme.graphics.trader.small",
+    "path": "base/ships/melnorme/trader-sml.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.mmrnmhrm.graphics.torpedo.large",
+    "path": "base/ships/mmrnmhrm/torpedo-big.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.mmrnmhrm.graphics.torpedo.medium",
+    "path": "base/ships/mmrnmhrm/torpedo-med.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.mmrnmhrm.graphics.torpedo.small",
+    "path": "base/ships/mmrnmhrm/torpedo-sml.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.mmrnmhrm.graphics.xform.large",
+    "path": "base/ships/mmrnmhrm/xform-big.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.mmrnmhrm.graphics.xform.medium",
+    "path": "base/ships/mmrnmhrm/xform-med.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.mmrnmhrm.graphics.xform.small",
+    "path": "base/ships/mmrnmhrm/xform-sml.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.mmrnmhrm.graphics.ywing.large",
+    "path": "base/ships/mmrnmhrm/ywing-big.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.mmrnmhrm.graphics.ywing.medium",
+    "path": "base/ships/mmrnmhrm/ywing-med.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.mmrnmhrm.graphics.ywing.small",
+    "path": "base/ships/mmrnmhrm/ywing-sml.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.mycon.graphics.plasma.large",
+    "path": "base/ships/mycon/plasma-big.ani",
+    "count": 19
+  },
+  {
+    "key": "ship.mycon.graphics.plasma.medium",
+    "path": "base/ships/mycon/plasma-med.ani",
+    "count": 19
+  },
+  {
+    "key": "ship.mycon.graphics.plasma.small",
+    "path": "base/ships/mycon/plasma-sml.ani",
+    "count": 19
+  },
+  {
+    "key": "ship.mycon.graphics.podship.large",
+    "path": "base/ships/mycon/podship-big.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.mycon.graphics.podship.medium",
+    "path": "base/ships/mycon/podship-med.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.mycon.graphics.podship.small",
+    "path": "base/ships/mycon/podship-sml.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.orz.graphics.howitzer.large",
+    "path": "base/ships/orz/howitzer-big.ani",
+    "count": 22
+  },
+  {
+    "key": "ship.orz.graphics.howitzer.medium",
+    "path": "base/ships/orz/howitzer-med.ani",
+    "count": 22
+  },
+  {
+    "key": "ship.orz.graphics.howitzer.small",
+    "path": "base/ships/orz/howitzer-sml.ani",
+    "count": 22
+  },
+  {
+    "key": "ship.orz.graphics.nemesis.large",
+    "path": "base/ships/orz/nemesis-big.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.orz.graphics.nemesis.medium",
+    "path": "base/ships/orz/nemesis-med.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.orz.graphics.nemesis.small",
+    "path": "base/ships/orz/nemesis-sml.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.orz.graphics.turret.large",
+    "path": "base/ships/orz/turret-big.ani",
+    "count": 32
+  },
+  {
+    "key": "ship.orz.graphics.turret.medium",
+    "path": "base/ships/orz/turret-med.ani",
+    "count": 22
+  },
+  {
+    "key": "ship.orz.graphics.turret.small",
+    "path": "base/ships/orz/turret-sml.ani",
+    "count": 22
+  },
+  {
+    "key": "ship.pkunk.graphics.bug.large",
+    "path": "base/ships/pkunk/bug-big.ani",
+    "count": 1
+  },
+  {
+    "key": "ship.pkunk.graphics.bug.medium",
+    "path": "base/ships/pkunk/bug-med.ani",
+    "count": 1
+  },
+  {
+    "key": "ship.pkunk.graphics.bug.small",
+    "path": "base/ships/pkunk/bug-sml.ani",
+    "count": 1
+  },
+  {
+    "key": "ship.pkunk.graphics.fury.large",
+    "path": "base/ships/pkunk/fury-big.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.pkunk.graphics.fury.medium",
+    "path": "base/ships/pkunk/fury-med.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.pkunk.graphics.fury.small",
+    "path": "base/ships/pkunk/fury-sml.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.samatra.graphics.generator.large",
+    "path": "base/ships/samatra/generator-big.ani",
+    "count": 22
+  },
+  {
+    "key": "ship.samatra.graphics.generator.medium",
+    "path": "base/ships/samatra/generator-med.ani",
+    "count": 22
+  },
+  {
+    "key": "ship.samatra.graphics.generator.small",
+    "path": "base/ships/samatra/generator-sml.ani",
+    "count": 22
+  },
+  {
+    "key": "ship.samatra.graphics.samatra.large",
+    "path": "base/ships/samatra/samatra-big.ani",
+    "count": 15
+  },
+  {
+    "key": "ship.samatra.graphics.samatra.medium",
+    "path": "base/ships/samatra/samatra-med.ani",
+    "count": 15
+  },
+  {
+    "key": "ship.samatra.graphics.samatra.small",
+    "path": "base/ships/samatra/samatra-sml.ani",
+    "count": 15
+  },
+  {
+    "key": "ship.samatra.graphics.sentinel.large",
+    "path": "base/ships/samatra/sentinel-big.ani",
+    "count": 30
+  },
+  {
+    "key": "ship.samatra.graphics.sentinel.medium",
+    "path": "base/ships/samatra/sentinel-med.ani",
+    "count": 30
+  },
+  {
+    "key": "ship.samatra.graphics.sentinel.small",
+    "path": "base/ships/samatra/sentinel-sml.ani",
+    "count": 30
+  },
+  {
+    "key": "ship.shofixti.graphics.destruct.large",
+    "path": "base/ships/shofixti/destruct-big.ani",
+    "count": 8
+  },
+  {
+    "key": "ship.shofixti.graphics.destruct.medium",
+    "path": "base/ships/shofixti/destruct-med.ani",
+    "count": 8
+  },
+  {
+    "key": "ship.shofixti.graphics.destruct.small",
+    "path": "base/ships/shofixti/destruct-sml.ani",
+    "count": 8
+  },
+  {
+    "key": "ship.shofixti.graphics.missile.large",
+    "path": "base/ships/shofixti/missile-big.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.shofixti.graphics.missile.medium",
+    "path": "base/ships/shofixti/missile-med.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.shofixti.graphics.missile.small",
+    "path": "base/ships/shofixti/missile-sml.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.shofixti.graphics.oldcaptain",
+    "path": "base/ships/shofixti/oldscout-cap.ani",
+    "count": 15
+  },
+  {
+    "key": "ship.shofixti.graphics.oldscout.large",
+    "path": "base/ships/shofixti/oldscout-big.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.shofixti.graphics.oldscout.medium",
+    "path": "base/ships/shofixti/oldscout-med.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.shofixti.graphics.oldscout.small",
+    "path": "base/ships/shofixti/oldscout-sml.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.shofixti.graphics.scout.large",
+    "path": "base/ships/shofixti/scout-big.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.shofixti.graphics.scout.medium",
+    "path": "base/ships/shofixti/scout-med.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.shofixti.graphics.scout.small",
+    "path": "base/ships/shofixti/scout-sml.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.slylandro.graphics.probe.large",
+    "path": "base/ships/slylandro/probe-big.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.slylandro.graphics.probe.medium",
+    "path": "base/ships/slylandro/probe-med.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.slylandro.graphics.probe.small",
+    "path": "base/ships/slylandro/probe-sml.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.spathi.graphics.butt.large",
+    "path": "base/ships/spathi/butt-big.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.spathi.graphics.butt.medium",
+    "path": "base/ships/spathi/butt-med.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.spathi.graphics.butt.small",
+    "path": "base/ships/spathi/butt-sml.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.spathi.graphics.eluder.large",
+    "path": "base/ships/spathi/eluder-big.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.spathi.graphics.eluder.medium",
+    "path": "base/ships/spathi/eluder-med.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.spathi.graphics.eluder.small",
+    "path": "base/ships/spathi/eluder-sml.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.spathi.graphics.missile.large",
+    "path": "base/ships/spathi/missile-big.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.spathi.graphics.missile.medium",
+    "path": "base/ships/spathi/missile-med.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.spathi.graphics.missile.small",
+    "path": "base/ships/spathi/missile-sml.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.supox.graphics.blade.large",
+    "path": "base/ships/supox/blade-big.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.supox.graphics.blade.medium",
+    "path": "base/ships/supox/blade-med.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.supox.graphics.blade.small",
+    "path": "base/ships/supox/blade-sml.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.supox.graphics.glob.large",
+    "path": "base/ships/supox/glob-big.ani",
+    "count": 21
+  },
+  {
+    "key": "ship.supox.graphics.glob.medium",
+    "path": "base/ships/supox/glob-med.ani",
+    "count": 21
+  },
+  {
+    "key": "ship.supox.graphics.glob.small",
+    "path": "base/ships/supox/glob-sml.ani",
+    "count": 21
+  },
+  {
+    "key": "ship.syreen.graphics.dagger.large",
+    "path": "base/ships/syreen/dagger-big.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.syreen.graphics.dagger.medium",
+    "path": "base/ships/syreen/dagger-med.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.syreen.graphics.dagger.small",
+    "path": "base/ships/syreen/dagger-sml.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.syreen.graphics.penetrator.large",
+    "path": "base/ships/syreen/penetrator-big.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.syreen.graphics.penetrator.medium",
+    "path": "base/ships/syreen/penetrator-med.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.syreen.graphics.penetrator.small",
+    "path": "base/ships/syreen/penetrator-sml.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.thraddash.graphics.horn.large",
+    "path": "base/ships/thraddash/horn-big.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.thraddash.graphics.horn.medium",
+    "path": "base/ships/thraddash/horn-med.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.thraddash.graphics.horn.small",
+    "path": "base/ships/thraddash/horn-sml.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.thraddash.graphics.napalm.large",
+    "path": "base/ships/thraddash/napalm-big.ani",
+    "count": 8
+  },
+  {
+    "key": "ship.thraddash.graphics.napalm.medium",
+    "path": "base/ships/thraddash/napalm-med.ani",
+    "count": 8
+  },
+  {
+    "key": "ship.thraddash.graphics.napalm.small",
+    "path": "base/ships/thraddash/napalm-sml.ani",
+    "count": 8
+  },
+  {
+    "key": "ship.thraddash.graphics.torch.large",
+    "path": "base/ships/thraddash/torch-big.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.thraddash.graphics.torch.medium",
+    "path": "base/ships/thraddash/torch-med.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.thraddash.graphics.torch.small",
+    "path": "base/ships/thraddash/torch-sml.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.umgah.graphics.cone.large",
+    "path": "base/ships/umgah/cone-big.ani",
+    "count": 48
+  },
+  {
+    "key": "ship.umgah.graphics.cone.medium",
+    "path": "base/ships/umgah/cone-med.ani",
+    "count": 48
+  },
+  {
+    "key": "ship.umgah.graphics.cone.small",
+    "path": "base/ships/umgah/cone-sml.ani",
+    "count": 48
+  },
+  {
+    "key": "ship.umgah.graphics.drone.large",
+    "path": "base/ships/umgah/drone-big.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.umgah.graphics.drone.medium",
+    "path": "base/ships/umgah/drone-med.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.umgah.graphics.drone.small",
+    "path": "base/ships/umgah/drone-sml.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.umgah.graphics.spritz",
+    "path": "base/ships/umgah/spritz.ani",
+    "count": 6
+  },
+  {
+    "key": "ship.urquan.graphics.dreadnought.large",
+    "path": "base/ships/urquan/dreadnought-big.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.urquan.graphics.dreadnought.medium",
+    "path": "base/ships/urquan/dreadnought-med.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.urquan.graphics.dreadnought.small",
+    "path": "base/ships/urquan/dreadnought-sml.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.urquan.graphics.fighter.large",
+    "path": "base/ships/urquan/fighter-big.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.urquan.graphics.fighter.medium",
+    "path": "base/ships/urquan/fighter-med.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.urquan.graphics.fighter.small",
+    "path": "base/ships/urquan/fighter-sml.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.urquan.graphics.fusion.large",
+    "path": "base/ships/urquan/fusion-big.ani",
+    "count": 24
+  },
+  {
+    "key": "ship.urquan.graphics.fusion.medium",
+    "path": "base/ships/urquan/fusion-med.ani",
+    "count": 24
+  },
+  {
+    "key": "ship.urquan.graphics.fusion.small",
+    "path": "base/ships/urquan/fusion-sml.ani",
+    "count": 24
+  },
+  {
+    "key": "ship.utwig.graphics.jugger.large",
+    "path": "base/ships/utwig/jugger-big.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.utwig.graphics.jugger.medium",
+    "path": "base/ships/utwig/jugger-med.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.utwig.graphics.jugger.small",
+    "path": "base/ships/utwig/jugger-sml.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.utwig.graphics.lance.large",
+    "path": "base/ships/utwig/lance-big.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.utwig.graphics.lance.medium",
+    "path": "base/ships/utwig/lance-med.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.utwig.graphics.lance.small",
+    "path": "base/ships/utwig/lance-sml.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.vux.graphics.intruder.large",
+    "path": "base/ships/vux/intruder-big.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.vux.graphics.intruder.medium",
+    "path": "base/ships/vux/intruder-med.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.vux.graphics.intruder.small",
+    "path": "base/ships/vux/intruder-sml.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.vux.graphics.limpets.large",
+    "path": "base/ships/vux/limpets-big.ani",
+    "count": 4
+  },
+  {
+    "key": "ship.vux.graphics.limpets.medium",
+    "path": "base/ships/vux/limpets-med.ani",
+    "count": 4
+  },
+  {
+    "key": "ship.vux.graphics.limpets.small",
+    "path": "base/ships/vux/limpets-sml.ani",
+    "count": 4
+  },
+  {
+    "key": "ship.vux.graphics.slime",
+    "path": "base/ships/vux/slime.ani",
+    "count": 6
+  },
+  {
+    "key": "ship.yehat.graphics.missile.large",
+    "path": "base/ships/yehat/missile-big.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.yehat.graphics.missile.medium",
+    "path": "base/ships/yehat/missile-med.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.yehat.graphics.missile.small",
+    "path": "base/ships/yehat/missile-sml.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.yehat.graphics.shield.large",
+    "path": "base/ships/yehat/shield-big.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.yehat.graphics.shield.medium",
+    "path": "base/ships/yehat/shield-med.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.yehat.graphics.shield.small",
+    "path": "base/ships/yehat/shield-sml.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.yehat.graphics.terminator.large",
+    "path": "base/ships/yehat/terminator-big.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.yehat.graphics.terminator.medium",
+    "path": "base/ships/yehat/terminator-med.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.yehat.graphics.terminator.small",
+    "path": "base/ships/yehat/terminator-sml.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.zoqfotpik.graphics.proboscis.large",
+    "path": "base/ships/zoqfotpik/proboscis-big.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.zoqfotpik.graphics.proboscis.medium",
+    "path": "base/ships/zoqfotpik/proboscis-med.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.zoqfotpik.graphics.proboscis.small",
+    "path": "base/ships/zoqfotpik/proboscis-sml.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.zoqfotpik.graphics.spit.large",
+    "path": "base/ships/zoqfotpik/spit-big.ani",
+    "count": 13
+  },
+  {
+    "key": "ship.zoqfotpik.graphics.spit.medium",
+    "path": "base/ships/zoqfotpik/spit-med.ani",
+    "count": 13
+  },
+  {
+    "key": "ship.zoqfotpik.graphics.spit.small",
+    "path": "base/ships/zoqfotpik/spit-sml.ani",
+    "count": 13
+  },
+  {
+    "key": "ship.zoqfotpik.graphics.stinger.large",
+    "path": "base/ships/zoqfotpik/stinger-big.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.zoqfotpik.graphics.stinger.medium",
+    "path": "base/ships/zoqfotpik/stinger-med.ani",
+    "count": 16
+  },
+  {
+    "key": "ship.zoqfotpik.graphics.stinger.small",
+    "path": "base/ships/zoqfotpik/stinger-sml.ani",
+    "count": 16
+  }
+]
