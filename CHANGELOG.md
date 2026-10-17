@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.9.59
+
+- Smooth player and alien hull rotation between native combat turns, including their thrusters.
+- Preserve native physics, aiming, cooldowns, collisions, and instant reversal/teleport abilities.
+
 ## 0.9.58
 
 - Execute all 25 original UQM ship modules, tactical AI, movement, weapons, energy, and collision callbacks in WebAssembly.
