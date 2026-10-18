@@ -1,0 +1,15 @@
+const fs=require('fs'),vm=require('vm'),assert=require('assert/strict'),path=require('path');
+const code=fs.readFileSync(path.join(__dirname,'../src/game.js'),'utf8');
+const helper=code.slice(code.indexOf('function awardRingResource('),code.indexOf('function awardBlock('));
+let inventory={},messages=[],random=.05,capacity=1200;
+const math=Object.create(Math);math.random=()=>random;
+const world={Math:math,floaters:[],storeCargo(name,n){let free=capacity-Object.values(inventory).reduce((a,b)=>a+b,0),stored=Math.min(n,free);if(stored)inventory[name]=(inventory[name]||0)+stored;return stored},notice:text=>messages.push(text)};
+vm.createContext(world);vm.runInContext(helper,world);
+assert.equal(world.awardRingResource({x:1,y:2,ore:'Copper'}),1);assert.equal(inventory.Copper,1);assert.equal(world.floaters[0].text,'+1 Copper');
+random=.1;assert.equal(world.awardRingResource({x:1,y:2,ore:'Silver'}),0);assert.equal(inventory.Silver,undefined);
+random=.099999;assert.equal(world.awardRingResource({x:1,y:2}),1);assert.equal(inventory.Silver,1);assert.equal(Object.hasOwn(inventory,'undefined'),false);
+capacity=2;assert.equal(world.awardRingResource({x:1,y:2,ore:'Silver'}),0);assert.match(messages.at(-1),/CARGO FULL/);assert.equal(inventory.Silver,1);
+assert.ok(code.includes("if(c.body==='ring')awardRingResource(c);"));
+assert.ok(code.includes("ctx.fillText(f.text||'+'+fmt(f.credits)+' CR'"));
+assert.ok(code.includes("if(c.body==='ring')return 1"));
+console.log('PASS: 10% boundary, one-piece awards, visible feedback, legacy ore fallback, and full-cargo handling.');

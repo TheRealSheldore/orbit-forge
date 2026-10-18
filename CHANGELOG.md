@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.9.61
+
+- Show Copper/Silver drops from ring blocks, while retaining 10% chance and one resource per successful drop.
+- Report cargo-full rejections and recover a valid ore name for older ring blocks.
+
 ## 0.9.60
 
 - Hide the original red ion trail in favour of the existing blue thrusters.
@@ -76,3 +81,4 @@
 - Split the existing v0.9.51 HTML into editable code, styles, and media files.
 - Added a builder that recreates the original standalone HTML.
 - Added local reference and JavaScript syntax checks.
+
