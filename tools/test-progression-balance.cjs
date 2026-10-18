@@ -8,7 +8,7 @@ vm.runInContext(`const PLANET_MULT=[1,11.1963,7.4666,2.58,2.5,2.42,2.34,2.26,2.1
 for(const name of ['breakthroughCount','breakthroughLevel','breakthroughMultiplier','planetTotalHp','weaponBaseRate','droneCount','weaponRate','unscaledWeaponDamage','weaponBaseDamage','weaponUpgradeCost','weaponDamage','weaponDpsFactor','weaponDps','nextWeaponPriceBase','ownedWeaponCount','newWeaponCost','universeReward'])vm.runInContext(line(name),w);
 vm.runInContext(code.slice(code.indexOf('function newWeaponProfile('),code.indexOf('let weaponChoiceOpen=false;')),w);
 w.initializeWeaponEconomy();
-const totals=[];for(let p=1;p<=5;p++){w.s.planet=p;const u1=w.planetTotalHp();w.s.universe=2;const u2=w.planetTotalHp();w.s.universe=1;assert.equal(u1,Math.round(u2*(p>=4?16:1)));totals.push({planet:p,firstUniverseHP:u1,laterUniverseHP:u2});}
+const totals=[];for(let p=1;p<=5;p++){w.s.planet=p;const u1=w.planetTotalHp();w.s.universe=2;const u2=w.planetTotalHp();w.s.universe=1;assert.equal(u1,u2);if(p>=4)assert.ok(u1>=[2369500,5923750][p-4]*16);totals.push({planet:p,firstUniverseHP:u1,laterUniverseHP:u2});}
 assert.equal(w.s.weaponPriceBases[0],25);
 w.s.weaponLevels[0]=25;
 const reference=w.weaponDamage(0)*w.weaponRate(0)*Math.min(4,w.weaponDpsFactor(0));
@@ -38,6 +38,6 @@ vm.runInContext('let weaponBuyAmount=10;function weaponTierRecipe(){return {}}',
 w.s.credits=1e9;const starting=w.s.weaponLevels[2],plan=w.weaponBuyPlan(2);assert.equal(w.s.weaponLevels[2],starting);let sum=0;
 for(let j=0;j<10;j++){sum+=w.weaponUpgradeCost(2);w.s.weaponLevels[2]++;}assert.equal(plan.credits,sum);assert.equal(plan.count,10);
 w.s=state();w.s.planet=3;w.s.runEarnedCredits=20000;assert.equal(w.universeReward(),0);w.s.planet=4;assert.equal(w.universeReward(),4);
-assert.ok(code.includes('economyBalance:1'));assert.ok(code.includes('hp*16'));assert.ok(code.includes('s.weaponPriceBases=Array(10).fill(0);s.weaponPriceBases[0]=25;s.weaponDamageScales=Array(10).fill(1);'));
+assert.ok(code.includes('economyBalance:2'));assert.ok(code.includes('hp*newFactor/oldFactor'));assert.ok(code.includes('s.weaponPriceBases=Array(10).fill(0);s.weaponPriceBases[0]=25;s.weaponDamageScales=Array(10).fill(1);'));
 console.table(totals);console.table(offers);
 console.log('PASS: ascent wall, every weapon preview, stable acquisition values, legacy migration, batch prices, and first ascent eligibility.');

@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.9.63
+
+- Apply dense strata to planet 4 onward in all universes, with an additional 15% HP growth per planet. Migrate saved damage once.
+- Give each collected alien site one 33% roll for an unknown, stage-appropriate research recipe. Exclude merchant-only plans and active research jobs.
+- Apply fixed planet-based alien hull resistance in native combat, including fractional projectile and area damage. Early alien attacks are stronger; encounter variation and player upgrades determine outcomes.
+- Start two-ship fleets at planet 8, then add a ship every three planets, up to eight.
+- Smooth displayed combat turns and thruster intensity, and add a steering dead band to reduce rapid direction changes.
+
 ## 0.9.62
 
 - Make planet 4 and later planets 16x tougher in the first universe, encouraging the first ascent. Later universes retain normal planet HP. Existing cleared blocks stay cleared.
