@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.9.64
+
+- Bound host projectile collision work after long relative moves. Use continuous segment tests for long sweeps and do not collide along Arilou teleport routes.
+- Validate restored battle clocks and cap native catch-up work per update, preventing invalid clocks from stalling combat.
+- Preserve the last runtime error and combat context locally, with details available in the developer menu.
+
 ## 0.9.63
 
 - Apply dense strata to planet 4 onward in all universes, with an additional 15% HP growth per planet. Migrate saved damage once.
