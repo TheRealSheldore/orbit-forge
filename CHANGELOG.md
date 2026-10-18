@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.9.62
+
+- Make planet 4 and later planets 16x tougher in the first universe, encouraging the first ascent. Later universes retain normal planet HP. Existing cleared blocks stay cleared.
+- Anchor new weapon damage to 60% of the unlocking weapon's effective DPS, limiting area coverage to four targets for this comparison. Preserve each weapon's firing behaviour.
+- Set the first upgrade price to 25% of the unlocking weapon's next level (minimum 75 CR), then retain 12% level growth. Acquisition costs at least four starting upgrades.
+- Preview starting damage, fire rate and upgrade price. Persist acquisition values across saves; reset them on ascension.
+
 ## 0.9.61
 
 - Show Copper/Silver drops from ring blocks, while retaining 10% chance and one resource per successful drop.
