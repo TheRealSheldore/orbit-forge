@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.9.69
+
+- Deliver an editable folder version with a Windows launcher and a local server. Code and settings refresh without rebuilding or redistributing media.
+- Add settings/game-settings.js for ship speed, turn speed, turret tracking, weapon damage, fire rate, upgrade prices, planet HP and resource drop chances. Defaults preserve gameplay.
+- Preserve current planet damage when changing its HP multiplier.
+- Keep a stable localhost address for browser saves and disable browser caching during development.
+
 ## 0.9.68
 
 - Replace the placeholder turret with approved transparent ivory-and-cobalt artwork matching the player ship.

@@ -1,53 +1,62 @@
 # Orbit Forge
 
-An automatic space-mining game. Modify Your ship, choose weapons, collect resources, research technology, meet alien ships, and earn permanent upgrades by entering new universes.
+Current version: **0.9.69**. This folder runs directly, without compiling or bundling.
 
-Current version: **0.9.57**.
+## Start playing
 
-## Play locally
+1. Extract the entire ZIP.
+2. Install Python 3.9 or newer once, if needed: <https://www.python.org/downloads/windows/>.
+3. Double-click **Start-Orbit-Forge.bat** on Windows. Keep its window open.
 
-From this folder, run:
+The launcher opens <http://127.0.0.1:8765/>. On macOS or Linux, run `sh Start-Orbit-Forge.sh`. You can also run `python tools/serve.py --open`.
 
-```sh
-python tools/prepare.py
-python -m http.server 8000
-```
+Use the same address each time to keep the same browser save. The earlier downloaded HTML uses a separate browser save, which does not transfer automatically.
 
-Open **http://localhost:8000** in your browser. The preparation command joins the mining music parts without changing the audio. No package installation is needed. Progress saves in that browser. Tap the top status bar to open developer settings.
+## Make a quick change
 
-## Build a downloadable game
+Open **settings/game-settings.js** in Notepad. Change a number, save, and refresh the game. Keep the commas and brackets.
+
+| Setting | What it changes |
+|---|---|
+| `shipSpeedMultiplier` | Ship travel speed |
+| `shipTurnMultiplier` | Ship turning speed |
+| `turretTurnRate` | Turret turning speed, initially 9 |
+| `weaponDamageMultiplier` | All weapon damage |
+| `weaponFireRateMultiplier` | All weapon attack rates |
+| `weaponUpgradeCostMultiplier` | Weapon level prices in credits |
+| `planetHpMultiplier` | Planet block HP; existing damage is scaled on reload |
+| `alienRecipeChance` | Recipe chance per collected alien site |
+| `ringResourceChance` | Resource chance per mined ring block |
+
+A multiplier of `1` is normal, `1.25` is 25% more, and `0.8` is 20% less. A chance of `0.33` means 33%. Existing sites do not reroll recipes after being collected. Invalid or missing numeric settings use defaults.
+
+For other changes, edit `src/game.js` or `styles/game.css`, then refresh. Replace images and audio in `assets/`. Image and audio changes need a refresh too. No build step is required for any of these edits.
+
+## Updates
+
+Keep this folder as the working game. Future tweaks can replace just the changed code or settings files. You only need new media files when the artwork or audio changes. Restart the launcher only if the server code changes.
+
+The local server disables browser caching and listens only on your own computer. Stop it with Ctrl+C or close its window. If port 8765 is busy, close an earlier Orbit Forge launcher window and try again. Do not run two copies at once.
+
+## Portable single-file releases
+
+Single-file HTML releases remain available. To build one from this folder:
 
 ```sh
 python tools/build.py
 ```
 
-The output is `dist/Orbit-Forge-v0.9.57.html`. It includes the music, artwork, and code in one file and can be opened offline.
+It writes `dist/Orbit-Forge-v0.9.69.html`. This is optional and is only needed for a portable release.
 
-## Project files
+## Files and source
 
-| Path | Purpose |
+| Folder | Purpose |
 |---|---|
-| `index.html` | Game interface and media references |
-| `src/game.js` | Mining, movement, weapons, combat, progression, and menus |
-| `src/boot.js` | Startup status and error reporting |
-| `styles/game.css` | Layout and appearance |
-| `assets/music/` | Five music tracks |
-| `assets/images/` | Ship and weapon artwork |
-| `assets/manifest.json` | Media types used by the offline builder |
-| `VERSION` | Current game version |
-| `docs/` | Design and audit notes |
+| `settings/` | Small editable balance settings |
+| `src/` | Startup, game code and native combat loader |
+| `styles/` | Layout and interface appearance |
+| `assets/` | Ship art, weapon art, music and compiled combat engine |
+| `tools/` | Launcher server, checks and release builder |
+| `native/` and `vendor/` | Combat engine source, original source archive parts and licenses |
 
-## Make a change
-
-Edit the source files, run `python tools/check.py`, and playtest the affected behaviour. JavaScript syntax checks also need Node.js. Increase `VERSION` when making a new game release, add a short entry to `CHANGELOG.md`, then rebuild the downloadable HTML.
-
-Generated `dist/` files are excluded from Git. Keep the editable sources in the repository and attach the built HTML to a release when sharing a version.
-
-## Current gameplay
-
-The player makes upgrade and equipment decisions while the ship mines automatically. Ten weapons have their own progression paths. Scanners reveal ores, gems, plants, creatures, and alien technology. Systems, crafting, research, trading, combat, and permanent Aether upgrades support longer runs.
-
-Ring blocks break in one hit, award one credit, and have a ten-percent chance to drop one Copper or Silver. The first universe change unlocks at planet four.
-
-Alien combat runs the original UQM C ship routines through WebAssembly. See [native/README.md](native/README.md) for the build, source, licenses, and the boundary between UQM combat and Orbit Forge presentation/player equipment.
-
+Native combat uses the UQM source and licenses described in [native/README.md](native/README.md). The corresponding native source and original source archive parts are included. Normal game edits do not require rebuilding this engine. The approved turret art is in `assets/images/player-turret-v2.png`.

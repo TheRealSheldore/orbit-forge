@@ -3,7 +3,7 @@ const code=fs.readFileSync(path.join(__dirname,'../src/game.js'),'utf8');
 const line=name=>code.split('\n').find(l=>l.startsWith('function '+name+'('));
 const state=()=>({planet:1,universe:1,drill:1,permanent:0,reactor:0,targeting:0,merchantRelics:0,weaponLevels:Array(10).fill(1),weaponPriceBases:Array(10).fill(0),weaponDamageScales:Array(10).fill(1),ownedWeapons:1,weaponOrder:[0],newestWeapon:0,weaponOffersMask:0,breakthroughClaims:Array(10).fill(0),inventory:{},credits:1e7,runEarnedCredits:0});
 const w={s:state(),Math,WEAPONS:Array.from({length:10},()=>['Weapon']),bioFactor:()=>1,equipmentFactor:()=>1,universeFactor:()=>1,weaponUpgradeMultiplier:()=>1,upgradeHas:()=>false,equipped:()=>false,dev:{credits:false,materials:true},craftOwned:()=>0};
-vm.createContext(w);
+vm.createContext(w);vm.runInContext(code.split('\n').find(l=>l.startsWith('function gameSetting(')),w);
 vm.runInContext(`const PLANET_MULT=[1,11.1963,7.4666,2.58,2.5,2.42,2.34,2.26,2.18,2.1];const MILESTONES=[10,25,50,75,100,150,200,250,300];const weaponStars=i=>MILESTONES.filter(x=>x<=s.weaponLevels[i]).length;const weaponFeature=i=>Math.floor((weaponStars(i)+1)/2);const STAR_ACTIVE_MS=9000,STAR_FLIGHT_MS=400,STAR_REST_MS=1500;`,w);
 for(const name of ['breakthroughCount','breakthroughLevel','breakthroughMultiplier','planetTotalHp','weaponBaseRate','droneCount','weaponRate','unscaledWeaponDamage','weaponBaseDamage','weaponUpgradeCost','weaponDamage','weaponDpsFactor','weaponDps','nextWeaponPriceBase','ownedWeaponCount','newWeaponCost','universeReward'])vm.runInContext(line(name),w);
 vm.runInContext(code.slice(code.indexOf('function newWeaponProfile('),code.indexOf('let weaponChoiceOpen=false;')),w);
@@ -41,3 +41,9 @@ w.s=state();w.s.planet=3;w.s.runEarnedCredits=20000;assert.equal(w.universeRewar
 assert.ok(code.includes('economyBalance:2'));assert.ok(code.includes('hp*newFactor/oldFactor'));assert.ok(code.includes('s.weaponPriceBases=Array(10).fill(0);s.weaponPriceBases[0]=25;s.weaponDamageScales=Array(10).fill(1);'));
 console.table(totals);console.table(offers);
 console.log('PASS: ascent wall, every weapon preview, stable acquisition values, legacy migration, batch prices, and first ascent eligibility.');
+// Editing the separate settings file must change gameplay without changing source.
+w.s=state();w.initializeWeaponEconomy();const originalDamage=w.weaponDamage(0),originalRate=w.weaponRate(0),originalCost=w.weaponUpgradeCost(0),originalHp=w.planetTotalHp();
+w.ORBIT_FORGE_SETTINGS={weaponDamageMultiplier:2,weaponFireRateMultiplier:1.5,weaponUpgradeCostMultiplier:2,planetHpMultiplier:3};
+assert.equal(w.weaponDamage(0),originalDamage*2);assert.equal(w.weaponRate(0),originalRate*1.5);assert.equal(w.weaponUpgradeCost(0),originalCost*2);assert.equal(w.planetTotalHp(),originalHp*3);
+w.ORBIT_FORGE_SETTINGS.weaponDamageMultiplier='invalid';assert.equal(w.weaponDamage(0),originalDamage);
+console.log('PASS: external damage, rate, price and HP settings change gameplay, and invalid settings fall back safely.');

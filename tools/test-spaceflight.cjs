@@ -1,6 +1,6 @@
 const fs=require('fs'),path=require('path'),vm=require('vm'),assert=require('assert/strict');
 const source=fs.readFileSync(path.join(__dirname,'../src/game.js'),'utf8');
-const w={Math,ship:{},encounter:null};vm.createContext(w);
+const w={Math,ship:{},encounter:null};vm.createContext(w);vm.runInContext(source.split('\n').find(l=>l.startsWith('function gameSetting(')),w);
 vm.runInContext(source.slice(source.indexOf('function rotateSpacecraft('),source.indexOf('function moveAlienTo(')),w);
 const body=()=>({x:0,y:0,a:0,vx:1,vy:0,thrust:0});
 // No thrust, no drag. Heading may change without rotating the velocity vector.

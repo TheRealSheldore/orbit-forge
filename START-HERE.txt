@@ -1,0 +1,25 @@
+ORBIT FORGE: EDITABLE FOLDER VERSION
+
+1. Extract the entire ZIP first.
+2. On Windows, double-click Start-Orbit-Forge.bat.
+3. Keep the launcher window open while playing.
+
+The launcher needs Python 3.9 or newer, installed once:
+https://www.python.org/downloads/windows/
+
+To tweak the game:
+  Open settings/game-settings.js in Notepad.
+  Change a number, save, and refresh the game in your browser.
+  Keep the commas and brackets.
+
+Example: weaponDamageMultiplier: 1.25 gives 25% more damage.
+
+There is no rebuild for normal edits. For future updates, replace only
+the changed files. Keep the rest of the folder and your usual local address.
+
+Use http://127.0.0.1:8765/ so the browser keeps using the same save.
+The old downloaded HTML has a separate browser save. It is not transferred.
+
+The assets folder contains the images, sounds, music, and combat engine.
+The src folder contains the game code. The styles folder contains the layout.
+Native source and license information are included in native/ and vendor/.

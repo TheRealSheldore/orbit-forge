@@ -2,7 +2,7 @@ const fs=require('fs'),path=require('path'),vm=require('vm'),assert=require('ass
 const src=fs.readFileSync(path.join(__dirname,'../src/game.js'),'utf8');
 let roll=.329,notices=[],floats=[],renders=0;
 const math=Object.create(Math);math.random=()=>roll;
-const w={Math:math,s:{planet:1,universe:1,researchedRecipes:[],researchJobs:[]},BIOTECH_RECIPES:[{id:'first',name:'First',stage:1},{id:'second',name:'Second',stage:1,requires:'first'},{id:'later',name:'Later',stage:2}],upgradeHas:()=>false,researchStageReady:r=>r.stage===1,floaters:floats,notice:x=>notices.push(x),renderUI:()=>renders++};vm.createContext(w);
+const w={Math:math,s:{planet:1,universe:1,researchedRecipes:[],researchJobs:[]},BIOTECH_RECIPES:[{id:'first',name:'First',stage:1},{id:'second',name:'Second',stage:1,requires:'first'},{id:'later',name:'Later',stage:2}],upgradeHas:()=>false,researchStageReady:r=>r.stage===1,floaters:floats,notice:x=>notices.push(x),renderUI:()=>renders++};vm.createContext(w);vm.runInContext(src.split('\n').find(l=>l.startsWith('function gameSetting(')),w);
 vm.runInContext(src.slice(src.indexOf('function recoverAlienRecipe('),src.indexOf('function recoverDiscoveryAt(')),w);
 const site={kind:'tech',x:1,y:2};assert.equal(w.recoverAlienRecipe(site).id,'first');assert.equal(w.recoverAlienRecipe(site),null);assert.equal(w.s.researchedRecipes.length,1);
 roll=.33;assert.equal(w.recoverAlienRecipe({kind:'tech',x:1,y:2}),null);assert.equal(w.recoverAlienRecipe({kind:'ore',x:1,y:2}),null);

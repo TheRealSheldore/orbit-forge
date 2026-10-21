@@ -4,7 +4,7 @@ const helper=code.slice(code.indexOf('function awardRingResource('),code.indexOf
 let inventory={},messages=[],random=.05,capacity=1200;
 const math=Object.create(Math);math.random=()=>random;
 const world={Math:math,floaters:[],storeCargo(name,n){let free=capacity-Object.values(inventory).reduce((a,b)=>a+b,0),stored=Math.min(n,free);if(stored)inventory[name]=(inventory[name]||0)+stored;return stored},notice:text=>messages.push(text)};
-vm.createContext(world);vm.runInContext(helper,world);
+vm.createContext(world);vm.runInContext(code.split('\n').find(l=>l.startsWith('function gameSetting(')),world);vm.runInContext(helper,world);
 assert.equal(world.awardRingResource({x:1,y:2,ore:'Copper'}),1);assert.equal(inventory.Copper,1);assert.equal(world.floaters[0].text,'+1 Copper');
 random=.1;assert.equal(world.awardRingResource({x:1,y:2,ore:'Silver'}),0);assert.equal(inventory.Silver,undefined);
 random=.099999;assert.equal(world.awardRingResource({x:1,y:2}),1);assert.equal(inventory.Silver,1);assert.equal(Object.hasOwn(inventory,'undefined'),false);

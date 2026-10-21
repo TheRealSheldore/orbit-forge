@@ -1,6 +1,6 @@
 const fs=require('fs'),vm=require('vm'),path=require('path'),assert=require('assert/strict');
 const source=fs.readFileSync(path.join(__dirname,'../src/game.js'),'utf8');
-const w={Math,TAU:Math.PI*2,playerTurretSprite:{complete:false}};vm.createContext(w);
+const w={Math,TAU:Math.PI*2,playerTurretSprite:{complete:false}};vm.createContext(w);vm.runInContext(source.split('\n').find(l=>l.startsWith('function gameSetting(')),w);
 vm.runInContext(source.slice(source.indexOf('function rotateSpacecraft('),source.indexOf('function flyAlien(')),w);
 vm.runInContext(source.slice(source.indexOf('const PLAYER_TURRET_REACH='),source.indexOf('function spawnBullet(')),w);
 const ship={x:0,y:0,a:0,vx:1,vy:0};w.aimPlayerTurret(ship,0,4,1/60);
