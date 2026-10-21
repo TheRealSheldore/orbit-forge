@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.9.66
+
+- Advance ship visual rotation using mining simulation time outside combat. Previously the combat clock defaulted to zero and froze the displayed heading during mining.
+- Add a regression test that draws the player ship during mining and combat.
+
 ## 0.9.65
 
 - Give mining and host-controlled ships angular acceleration and braking rather than immediate heading corrections. Forward thrust bends the velocity vector; coasting preserves momentum.

@@ -23,3 +23,15 @@ p=body();p.a=Math.PI-.02;w.rotateSpacecraft(p,-Math.PI+.02,2.5,.02);assert.ok(p.
 vm.runInContext(source.slice(source.indexOf('const shipVisualMotion='),source.indexOf('function nativePilotInput(')),w);
 p=body();w.smoothShipVisual(p,0);let v=w.smoothShipVisual(p,.02,Math.PI);assert.ok(v.a>0&&v.a<.02);
 console.log('PASS: coasting, independent heading, gradual reversal, bounded turns, forward thrust, fresh drones, angle wrapping, and visual no-snap turns.');
+// Exercise the actual drawing entry point, including its default render clock.
+vm.runInContext(source.split('\n').find(l=>l.startsWith('const combatVisualTurns=')),w);
+vm.runInContext(source.slice(source.indexOf('function combatRenderAngle('),source.indexOf('function recordCombatTurn(')),w);
+vm.runInContext(source.split('\n').find(l=>l.startsWith('const combatVisualPositions=')),w);
+vm.runInContext(source.split('\n').find(l=>l.startsWith('function drawPlayerShip(')),w);
+let rendered=0;Object.assign(w,{mapZoom:1,PLAYER_HULL_SIZE:.65,ctx:{save(){},restore(){},translate(){},rotate(a){rendered=a-Math.PI/2},scale(){}},drawPlayerThrusters(){},drawShipHull(){}});
+for(const mode of ['mining','combat']){
+ const craft=body();w.encounter=mode==='combat'?{elapsed:0}:null;w.simulationTime=0;w.drawPlayerShip(craft,0,0,1,0);const start=rendered;
+ for(let i=1;i<=120;i++){w.simulationTime=i*1000/60;if(w.encounter)w.encounter.elapsed=i/60;craft.a=Math.PI/2;w.drawPlayerShip(craft,0,0,1,w.simulationTime)}
+ assert.ok(rendered-start>1.4,mode+' displayed heading must rotate');
+}
+console.log('PASS: actual player drawing rotates during both mining and combat.');
