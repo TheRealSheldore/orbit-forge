@@ -11,7 +11,7 @@ for(const key of ['ALIEN_ENGINES','PLAYER_ENGINES','PLAYER_WEAPON_COLORS','ALIEN
 const zero=()=>{},one=()=>1;
 Object.assign(w,{dev:{hp:true},s:{planet:1,universe:1,hull:0,shield:0,weaponTotals:Array.from({length:10},()=>({damage:0,best:0,blocks:0}))},damageSamples:[],followShip:false,camera:{x:0,y:0},shipSpeed:one,turnRate:()=>3,weaponDamage:one,weaponRate:()=>2,weaponRange:()=>5,weaponOn:()=>true,weaponFeature:()=>1,droneCount:()=>2,weaponSound:zero,prepareMerchant:zero,drawMerchant:zero,combatEvasion:()=>null,updateMerchantOverlay:zero,equipped:()=>false,upgradeHas:()=>false,alienWeaponSound:zero,shipExplosionSound:zero,storeCargo:zero,renderUI:zero,save:zero,notice:zero,merchantSound:zero});
 (async()=>{
- w.encounter=null;w.cells=[];
+ w.encounter=null;w.cells=[];w.playerTurretSprite={complete:false};
  const gradient={addColorStop(){}};w.ctx=new Proxy({arc(x,y,r){if(r<0)throw Error('Negative arc radius')}},{get:(t,k)=>k in t?t[k]:k.startsWith('create')?()=>gradient:()=>{},set:(t,k,v)=>(t[k]=v,true)});
  Object.assign(w,{cv:{clientWidth:420,clientHeight:850},mapZoom:1,mapScale:()=>10,simulationTime:1000,ship:{a:0},draw:zero,updateCombatStats:zero,drawShipHull:zero,drawWeaponSprite:zero,drawAlienBeamEffect:()=>false,drawLightningEffect:zero,fmt:String});
  vm.runInContext(declaration('function drawMerchant('),w);

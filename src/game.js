@@ -443,6 +443,7 @@ let extras=[[],[['Active time','9 s'],['Rest time','1.5 s'],['Arms',Math.min(9,3
 return `<div class="weapon-choice-backdrop"><section class="weapon-choice" role="dialog" aria-modal="true" aria-label="${WEAPONS[i][0]} statistics"><div class="row"><div class="title">${WEAPONS[i][0]}</div><button class="choice-close" data-action="closeWeaponInfo" aria-label="Close weapon stats">×</button></div><dl class="stats-list">`+rows.map(([name,value])=>`<div><dt>${name}</dt><dd>${value}</dd></div>`).join('')+`</dl><button data-action="weaponAudio:${i}" aria-pressed="${weaponAudio[i]}" aria-label="${WEAPONS[i][0]} sound">SOUND ${weaponAudio[i]?'ON':'OFF'}</button></section></div>`}
 
 function playerThrustForTurn(change){return Math.min(1,Math.abs(change)*.55+.25)}
+const playerTurretSprite=new Image();playerTurretSprite.src="assets/images/player-turret-v2.png";
 const PLAYER_TURRET_REACH=.78;
 function aimPlayerTurret(p,x,y,dt){
  const a=Number.isFinite(p.turretAngle)?p.turretAngle:p.a,rotor={a,angularVelocity:p.turretVelocity||0};
@@ -457,6 +458,10 @@ function createTurretShot(p,angle,damage,weapon,kind,range,speed=23){
 }
 function drawPlayerTurret(p,cx,cy,scale){
  const muzzle=playerTurretMuzzle(p);ctx.save();ctx.translate(cx+p.x*scale,cy+p.y*scale);ctx.rotate(muzzle.angle);
+ if(playerTurretSprite.complete&&playerTurretSprite.naturalWidth){
+  const size=PLAYER_TURRET_REACH/.589*scale;
+  ctx.drawImage(playerTurretSprite,-.315*size,-.498*size,size,size);ctx.restore();return;
+ }
  ctx.fillStyle='#0b242b';ctx.strokeStyle='#8ac2c5';ctx.lineWidth=Math.max(.8,scale*.035);
  ctx.beginPath();ctx.arc(0,0,.23*scale,0,TAU);ctx.fill();ctx.stroke();
  const shade=ctx.createLinearGradient(0,-.08*scale,0,.08*scale);shade.addColorStop(0,'#d5eeea');shade.addColorStop(.5,'#7ba1a6');shade.addColorStop(1,'#29494f');ctx.fillStyle=shade;
@@ -625,7 +630,7 @@ if(followShip){camera.x+=(ship.x-camera.x)*Math.min(1,dt*1.65);camera.y+=(ship.y
 for(const particle of dust){particle.age+=dt;let dx=ship.x-particle.x,dy=ship.y-particle.y,d=Math.hypot(dx,dy)||1,attract=7+23*particle.age/particle.life;particle.vx+=(dx/d*attract-particle.vx)*Math.min(1,dt*5);particle.vy+=(dy/d*attract-particle.vy)*Math.min(1,dt*5);particle.x+=particle.vx*dt;particle.y+=particle.vy*dt}dust=dust.filter(p=>p.age<p.life&&Math.hypot(p.x-ship.x,p.y-ship.y)>.18);
 for(const f of floaters)f.age+=dt;floaters=floaters.filter(f=>f.age<1.2);for(const e of effects)e.age+=dt;effects=effects.filter(e=>e.age<e.life);advanceBullets(dt);if(encounter?.type==='merchant')return;advanceWeapons(t,dt);if(encounter?.type==='merchant')return;if(visitor&&weaponOn(4)&&Math.abs(Math.hypot(visitor.x-ship.x,visitor.y-ship.y)-8)<2){visitorHit(visitor.x,visitor.y,weaponDamage(4),4);return}let ready=pendingHits.filter(h=>h.at<=t);pendingHits=pendingHits.filter(h=>h.at>t);for(const h of ready)if(cellMap.get(h.c.x+','+h.c.y)===h.c&&h.c.hp>0)hit(h.c,h.damage,h.weapon);if(planetClearPending){if(encounter?.type==='asteroid'){closeEncounter();return}else travelToNextPlanet(t)}draw(t)}
 let runtimeErrorCount=0;
-function reportRuntimeError(error){console.error('Orbit Forge:',error);let card=$('runtimeError');if(!card){card=document.createElement('div');card.id='runtimeError';card.style.cssText='position:absolute;left:8px;right:8px;bottom:48px;z-index:30;padding:8px;background:#102028ee;color:#ffd4b2;font:11px monospace;overflow-wrap:anywhere';view.appendChild(card)}card.textContent='Game error: '+(error?.message||String(error));card.hidden=false;try{localStorage.setItem('orbit-forge-last-error',JSON.stringify({version:'0.9.67',message:error?.message||String(error),stack:error?.stack,phase:encounter?.phase,ships:encounter?.ships?.map(m=>m.style),elapsed:encounter?.elapsed}))}catch(e){}}
+function reportRuntimeError(error){console.error('Orbit Forge:',error);let card=$('runtimeError');if(!card){card=document.createElement('div');card.id='runtimeError';card.style.cssText='position:absolute;left:8px;right:8px;bottom:48px;z-index:30;padding:8px;background:#102028ee;color:#ffd4b2;font:11px monospace;overflow-wrap:anywhere';view.appendChild(card)}card.textContent='Game error: '+(error?.message||String(error));card.hidden=false;try{localStorage.setItem('orbit-forge-last-error',JSON.stringify({version:'0.9.68',message:error?.message||String(error),stack:error?.stack,phase:encounter?.phase,ships:encounter?.ships?.map(m=>m.style),elapsed:encounter?.elapsed}))}catch(e){}}
 function recoverMotion(){for(let p of [ship,...drones,...(encounter?.ships||[]),...(encounter?.combatDrones||[]),...(encounter?.player?[encounter.player]:[])]){if(!Number.isFinite(p.x))p.x=0;if(!Number.isFinite(p.y))p.y=-planetRadius()-4;if(!Number.isFinite(p.a))p.a=0;if(!Number.isFinite(p.vx))p.vx=0;if(!Number.isFinite(p.vy))p.vy=0;if(!Number.isFinite(p.thrust))p.thrust=0}if(!Number.isFinite(camera.x))camera.x=ship.x;if(!Number.isFinite(camera.y))camera.y=ship.y}
 function frame(realTime){try{let elapsed=Math.min(.05,Math.max(0,(realTime-last)/1000))*dev.speed;last=realTime;let steps=Math.max(1,Math.ceil(elapsed/.02)),dt=elapsed/steps;for(let n=0;n<steps;n++){if((!encounter||encounter.type==='asteroid')&&!s.devPlanetReady)simulationTime+=dt*1000;stepFrame(simulationTime,dt)}runtimeErrorCount=0;let card=$('runtimeError');if(card)card.hidden=true}catch(error){runtimeErrorCount++;recoverMotion();try{if(encounter?.type==='merchant')drawMerchant();else draw(simulationTime)}catch(drawError){console.error(drawError)}reportRuntimeError(error)}finally{requestAnimationFrame(frame)}}
 

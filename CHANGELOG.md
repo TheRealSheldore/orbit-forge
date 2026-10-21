@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.9.68
+
+- Replace the placeholder turret with approved transparent ivory-and-cobalt artwork matching the player ship.
+- Anchor rotation at the bearing and align the illustrated barrel tip with the existing projectile muzzle. Keep the simple fallback while the image loads.
+
 ## 0.9.67
 
 - Add a visible independently rotating player turret during mining, combat and recovery.

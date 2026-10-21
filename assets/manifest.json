@@ -38,5 +38,9 @@
   {
     "path": "assets/engine/uqm.wasm",
     "mime": "application/wasm"
+  },
+  {
+    "path": "assets/images/player-turret-v2.png",
+    "mime": "image/png"
   }
 ]

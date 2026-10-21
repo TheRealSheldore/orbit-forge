@@ -1,6 +1,6 @@
 const fs=require('fs'),vm=require('vm'),path=require('path'),assert=require('assert/strict');
 const source=fs.readFileSync(path.join(__dirname,'../src/game.js'),'utf8');
-const w={Math,TAU:Math.PI*2};vm.createContext(w);
+const w={Math,TAU:Math.PI*2,playerTurretSprite:{complete:false}};vm.createContext(w);
 vm.runInContext(source.slice(source.indexOf('function rotateSpacecraft('),source.indexOf('function flyAlien(')),w);
 vm.runInContext(source.slice(source.indexOf('const PLAYER_TURRET_REACH='),source.indexOf('function spawnBullet(')),w);
 const ship={x:0,y:0,a:0,vx:1,vy:0};w.aimPlayerTurret(ship,0,4,1/60);
@@ -19,3 +19,11 @@ ship.turretAngle=Math.PI/2;w.fireAt({x:-.5,y:4,hp:4},1);assert.equal(w.bullets.l
 let rotation=0,circles=0;w.ctx={save(){},restore(){},translate(){},rotate(a){rotation=a},beginPath(){},arc(){circles++},fill(){},stroke(){},fillRect(){},strokeRect(){},createLinearGradient(){return {addColorStop(){}}}};
 w.drawPlayerTurret(ship,0,0,10);assert.equal(rotation,ship.turretAngle);assert.equal(circles,2);
 console.log('PASS: independent aiming, finite turn speed, alignment gating, one barrel origin for scatter, unchanged range, and turret drawing.');
+// Approved sprite uses the same pivot and muzzle as the firing model.
+let drawn;w.playerTurretSprite={complete:true,naturalWidth:1254};w.ctx.drawImage=(...args)=>drawn=args;
+w.drawPlayerTurret(ship,0,0,10);assert.ok(drawn);
+const [image,x,y,width,height]=drawn;
+assert.equal(image,w.playerTurretSprite);assert.equal(width,height);
+assert.ok(Math.abs(x+.315*width)<1e-9);assert.ok(Math.abs(y+.498*height)<1e-9);
+assert.ok(Math.abs(x+.904*width-.78*10)<1e-9,'drawn barrel tip must match projectile muzzle');
+console.log('PASS: approved turret sprite rotates about its bearing and its barrel tip matches the firing position.');
