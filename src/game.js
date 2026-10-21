@@ -107,7 +107,7 @@ function prepareAsteroid(){let e=encounter;if(e?.type!=='asteroid'||asteroidWorl
  cells=e.miningCells;cellMap=new Map(cells.map(c=>[c.x+','+c.y,c]));alive=cells.filter(c=>c.hp>0).length;discoveries=[];scanLevels={ore:0,flora:0,fauna:0,tech:0};Object.assign(ship,e.miningShip||{x:0,y:-radius-4,vx:0,vy:0,a:0});Object.assign(camera,e.miningCamera||ship);navNormal={x:0,y:-1};planetTransit=false;planetClearPending=false;resourceTarget=null;lockedTarget=null;drones=[];bullets=[];mortars=[];waves=[];effects=[];pendingHits=[];embeddedStars=[];dust=[];floaters=[];asteroidWorldActive=true;planetClearPending=alive===0;sawHits.clear();notice('ASTEROID FIELD');renderUI();
 }
 function restoreAsteroidWorld(){let world=encounter.returnWorld;if(!world)return;cells=world.cells;cellMap=new Map(cells.map(c=>[c.x+','+c.y,c]));alive=cells.filter(c=>c.hp>0).length;discoveries=world.discoveries;scanLevels=world.scanLevels;Object.assign(ship,world.ship);Object.assign(camera,world.camera);navNormal=world.navNormal;planetTransit=world.planetTransit;planetClearPending=false;lockedTarget=null;resourceTarget=null;drones=[];bullets=[];mortars=[];waves=[];effects=[];pendingHits=[];embeddedStars=[];dust=[];floaters=[];asteroidWorldActive=false}
-function planet(){visitor=null;visitorTimer=70+Math.random()*60;asteroidWorldActive=false;resourceTarget=null;resourceStep=null;planetTransit=false;planetClearPending=false;cells=[];cellMap=new Map();alive=0;const R=planetRadius(),saved=s.grid&&s.grid.schema===5&&s.grid.planet===s.planet?s.grid.hp:null,ratio=CORE_EDGE[Math.min(s.planet-1,CORE_EDGE.length-1)];let seed=(s.planet*2654435761)>>>0;function rand(){seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296}let weightSum=0;for(let y=-R;y<=R;y++)for(let x=-R;x<=R;x++){let d=Math.hypot(x+.5,y+.5);if(d>R-.35)continue;let r=rand(),type=r<volcanoFrequency()&&s.planet>=3?'explosive':r<.105&&s.planet>=3?'gold':'rock',depth=Math.max(0,Math.min(R,Math.floor(R-d))),weight=Math.pow(ratio,depth/R);let cell={x,y,hp:0,max:0,type,weight};cells.push(cell);weightSum+=weight;cellMap.set(x+","+y,cell)}addPlanetSatellites(R);let targetHp=planetTotalHp(),assigned=0,remainder=[];for(let i=0;i<cells.length;i++){let exact=targetHp*cells[i].weight/weightSum,whole=Math.floor(exact);cells[i].max=whole;assigned+=whole;remainder.push({i,fraction:exact-whole})}remainder.sort((a,b)=>b.fraction-a.fraction||a.i-b.i);for(let i=0;i<targetHp-assigned;i++)cells[remainder[i].i].max++;for(let i=0;i<cells.length;i++){let c=cells[i],old=saved&&saved[i];if(c.body==='ring')c.max=1;c.hp=typeof old==='number'&&Number.isFinite(old)?Math.max(0,Math.min(c.max,old)):c.max;if(c.hp>0)alive++}for(const centre of cells)if(centre.type==='explosive'&&centre.hp>0)for(let dy=-2;dy<=2;dy++)for(let dx=-2;dx<=2;dx++){let block=cellMap.get((centre.x+dx)+','+(centre.y+dy));if(block)block.volcanoZone=true}ship.x=0;ship.y=-R-4;ship.vx=0;ship.vy=0;ship.a=0;ship.thrust=0;navNormal={x:0,y:-1};bullets=[];drones=[];mortars=[];waves=[];embeddedStars=[];sawHits.clear();effects=[];pendingHits=[];floaters=[];dust=[];lockedTarget=null;lastBlock=null;turnState=null;camera.x=ship.x;camera.y=ship.y;generateDiscoveries();renderUI()}
+function planet(){visitor=null;visitorTimer=70+Math.random()*60;asteroidWorldActive=false;resourceTarget=null;resourceStep=null;planetTransit=false;planetClearPending=false;cells=[];cellMap=new Map();alive=0;const R=planetRadius(),saved=s.grid&&s.grid.schema===5&&s.grid.planet===s.planet?s.grid.hp:null,ratio=CORE_EDGE[Math.min(s.planet-1,CORE_EDGE.length-1)];let seed=(s.planet*2654435761)>>>0;function rand(){seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296}let weightSum=0;for(let y=-R;y<=R;y++)for(let x=-R;x<=R;x++){let d=Math.hypot(x+.5,y+.5);if(d>R-.35)continue;let r=rand(),type=r<volcanoFrequency()&&s.planet>=3?'explosive':r<.105&&s.planet>=3?'gold':'rock',depth=Math.max(0,Math.min(R,Math.floor(R-d))),weight=Math.pow(ratio,depth/R);let cell={x,y,hp:0,max:0,type,weight};cells.push(cell);weightSum+=weight;cellMap.set(x+","+y,cell)}addPlanetSatellites(R);let targetHp=planetTotalHp(),assigned=0,remainder=[];for(let i=0;i<cells.length;i++){let exact=targetHp*cells[i].weight/weightSum,whole=Math.floor(exact);cells[i].max=whole;assigned+=whole;remainder.push({i,fraction:exact-whole})}remainder.sort((a,b)=>b.fraction-a.fraction||a.i-b.i);for(let i=0;i<targetHp-assigned;i++)cells[remainder[i].i].max++;for(let i=0;i<cells.length;i++){let c=cells[i],old=saved&&saved[i];if(c.body==='ring')c.max=1;c.hp=typeof old==='number'&&Number.isFinite(old)?Math.max(0,Math.min(c.max,old)):c.max;if(c.hp>0)alive++}for(const centre of cells)if(centre.type==='explosive'&&centre.hp>0)for(let dy=-2;dy<=2;dy++)for(let dx=-2;dx<=2;dx++){let block=cellMap.get((centre.x+dx)+','+(centre.y+dy));if(block)block.volcanoZone=true}ship.x=0;ship.y=-R-4;ship.vx=0;ship.vy=0;ship.a=0;ship.angularVelocity=0;delete ship.guidanceX;delete ship.guidanceY;ship.thrust=0;navNormal={x:0,y:-1};bullets=[];drones=[];mortars=[];waves=[];embeddedStars=[];sawHits.clear();effects=[];pendingHits=[];floaters=[];dust=[];lockedTarget=null;lastBlock=null;turnState=null;camera.x=ship.x;camera.y=ship.y;generateDiscoveries();renderUI()}
 function cost(kind){let v={drill:12*Math.pow(1.48,s.drill-1),beam:95*Math.pow(1.9,s.beam),engine:55*Math.pow(1.7,s.engine),fortune:75*Math.pow(1.8,s.fortune)}[kind];return Math.ceil(v*Math.pow(1.16,s.planet-1))}
 function gain(c){s.runEarnedCredits+=Math.max(0,c);s.credits+=c;incomeWindow+=c;s.totalMined+=c}
 function blockReward(c){if(c.body==='ring')return 1;let R=planetRadius(),depth=Math.floor(Math.max(0,R-Math.hypot(c.x+.5,c.y+.5))),top=3+Math.round(Math.max(0,s.drill-1)*12/11),depthTop=3+Math.round((top-3)*depth/R),roll=3+Math.floor(Math.random()*(depthTop-2)),depthBonus=1+depth/R*2.16;return Math.max(1,Math.round(roll*depthBonus*Math.pow(1.18,s.planet-1)*mult()*(1+s.oreScanner*.05)*(upgradeHas('geology-valuation')?1.15:1)*bioFactor('geology')*(c.type==='gold'?8:c.type==='armored'?5:1)))}
@@ -596,7 +596,7 @@ if(followShip){camera.x+=(ship.x-camera.x)*Math.min(1,dt*1.65);camera.y+=(ship.y
 for(const particle of dust){particle.age+=dt;let dx=ship.x-particle.x,dy=ship.y-particle.y,d=Math.hypot(dx,dy)||1,attract=7+23*particle.age/particle.life;particle.vx+=(dx/d*attract-particle.vx)*Math.min(1,dt*5);particle.vy+=(dy/d*attract-particle.vy)*Math.min(1,dt*5);particle.x+=particle.vx*dt;particle.y+=particle.vy*dt}dust=dust.filter(p=>p.age<p.life&&Math.hypot(p.x-ship.x,p.y-ship.y)>.18);
 for(const f of floaters)f.age+=dt;floaters=floaters.filter(f=>f.age<1.2);for(const e of effects)e.age+=dt;effects=effects.filter(e=>e.age<e.life);advanceBullets(dt);if(encounter?.type==='merchant')return;advanceWeapons(t,dt);if(encounter?.type==='merchant')return;if(visitor&&weaponOn(4)&&Math.abs(Math.hypot(visitor.x-ship.x,visitor.y-ship.y)-8)<2){visitorHit(visitor.x,visitor.y,weaponDamage(4),4);return}let ready=pendingHits.filter(h=>h.at<=t);pendingHits=pendingHits.filter(h=>h.at>t);for(const h of ready)if(cellMap.get(h.c.x+','+h.c.y)===h.c&&h.c.hp>0)hit(h.c,h.damage,h.weapon);if(planetClearPending){if(encounter?.type==='asteroid'){closeEncounter();return}else travelToNextPlanet(t)}draw(t)}
 let runtimeErrorCount=0;
-function reportRuntimeError(error){console.error('Orbit Forge:',error);let card=$('runtimeError');if(!card){card=document.createElement('div');card.id='runtimeError';card.style.cssText='position:absolute;left:8px;right:8px;bottom:48px;z-index:30;padding:8px;background:#102028ee;color:#ffd4b2;font:11px monospace;overflow-wrap:anywhere';view.appendChild(card)}card.textContent='Game error: '+(error?.message||String(error));card.hidden=false;try{localStorage.setItem('orbit-forge-last-error',JSON.stringify({version:'0.9.64',message:error?.message||String(error),stack:error?.stack,phase:encounter?.phase,ships:encounter?.ships?.map(m=>m.style),elapsed:encounter?.elapsed}))}catch(e){}}
+function reportRuntimeError(error){console.error('Orbit Forge:',error);let card=$('runtimeError');if(!card){card=document.createElement('div');card.id='runtimeError';card.style.cssText='position:absolute;left:8px;right:8px;bottom:48px;z-index:30;padding:8px;background:#102028ee;color:#ffd4b2;font:11px monospace;overflow-wrap:anywhere';view.appendChild(card)}card.textContent='Game error: '+(error?.message||String(error));card.hidden=false;try{localStorage.setItem('orbit-forge-last-error',JSON.stringify({version:'0.9.65',message:error?.message||String(error),stack:error?.stack,phase:encounter?.phase,ships:encounter?.ships?.map(m=>m.style),elapsed:encounter?.elapsed}))}catch(e){}}
 function recoverMotion(){for(let p of [ship,...drones,...(encounter?.ships||[]),...(encounter?.combatDrones||[]),...(encounter?.player?[encounter.player]:[])]){if(!Number.isFinite(p.x))p.x=0;if(!Number.isFinite(p.y))p.y=-planetRadius()-4;if(!Number.isFinite(p.a))p.a=0;if(!Number.isFinite(p.vx))p.vx=0;if(!Number.isFinite(p.vy))p.vy=0;if(!Number.isFinite(p.thrust))p.thrust=0}if(!Number.isFinite(camera.x))camera.x=ship.x;if(!Number.isFinite(camera.y))camera.y=ship.y}
 function frame(realTime){try{let elapsed=Math.min(.05,Math.max(0,(realTime-last)/1000))*dev.speed;last=realTime;let steps=Math.max(1,Math.ceil(elapsed/.02)),dt=elapsed/steps;for(let n=0;n<steps;n++){if((!encounter||encounter.type==='asteroid')&&!s.devPlanetReady)simulationTime+=dt*1000;stepFrame(simulationTime,dt)}runtimeErrorCount=0;let card=$('runtimeError');if(card)card.hidden=true}catch(error){runtimeErrorCount++;recoverMotion();try{if(encounter?.type==='merchant')drawMerchant();else draw(simulationTime)}catch(drawError){console.error(drawError)}reportRuntimeError(error)}finally{requestAnimationFrame(frame)}}
 
@@ -829,10 +829,9 @@ function combatExitPoint(p){let best=null,cost=Infinity;for(let i=0;i<48;i++){le
 function stepCombatRecovery(dt){if(!combatRecovery)return false;if(combatClearance(ship)>=3){combatRecovery=false;resumeMiningFlight();notice('MINING RESUMED');save();return false}let q=ship.combatExit||(ship.combatExit=combatExitPoint(ship));moveCombatShip(ship,q.x,q.y,shipSpeed(),turnRate(),dt);if(followShip){camera.x+=(ship.x-camera.x)*Math.min(1,dt*2);camera.y+=(ship.y-camera.y)*Math.min(1,dt*2)}draw(simulationTime,true);let scale=mapScale();drawRecoveryShip(scale);return true}
 function drawRecoveryShip(scale){ctx.save();ctx.translate(cv.clientWidth/2+(ship.x-camera.x)*scale,cv.clientHeight*.38+(ship.y-camera.y)*scale);ctx.rotate(ship.a+Math.PI/2);drawPlayerThrusters(scale*PLAYER_HULL_SIZE,ship,simulationTime);drawShipHull(scale*PLAYER_HULL_SIZE,'player',ship.a);ctx.restore()}
 function resumeMiningFlight(){
- // Mining cruises at its configured speed. Combat's braking and status effects end here.
- let vx=Number.isFinite(ship.vx)?ship.vx:0,vy=Number.isFinite(ship.vy)?ship.vy:0,length=Math.hypot(vx,vy),speed=shipSpeed();
- let direction=length>.05?Math.atan2(vy,vx):ship.a;
- ship.vx=Math.cos(direction)*speed;ship.vy=Math.sin(direction)*speed;
+ // Preserve momentum when returning from combat. Thrusters regain cruise speed.
+ let vx=Number.isFinite(ship.vx)?ship.vx:0,vy=Number.isFinite(ship.vy)?ship.vy:0;
+ ship.vx=vx;ship.vy=vy;delete ship.guidanceX;delete ship.guidanceY;
  delete ship.limpets;delete ship.confusedUntil;delete ship.combatExit;
  let clear=surfaceClearance(),x=clear.x,y=clear.y,n=Math.hypot(x,y);
  if(Number.isFinite(n)&&n>.001){navNormal.x=x/n;navNormal.y=y/n;let tangent=-navNormal.y*ship.vx+navNormal.x*ship.vy;if(Math.abs(tangent)>.01)orbitDirection=tangent>0?1:-1}
@@ -920,17 +919,33 @@ function flySourceAlien(p,wantX,wantY,speed,turn,dt){
  }
 }
 
+// Turning changes heading. Only forward thrust changes linear momentum.
+function rotateSpacecraft(body,heading,maxRate,dt){
+ if(!(dt>0)||!Number.isFinite(heading))return;
+ const limit=2*Math.PI*(1-Math.exp(-Math.max(.05,maxRate)/(2*Math.PI))),acceleration=limit*4;
+ const delta=Math.atan2(Math.sin(heading-body.a),Math.cos(heading-body.a));
+ const desired=Math.sign(delta)*Math.min(limit,Math.sqrt(2*acceleration*Math.abs(delta))),previous=Number.isFinite(body.angularVelocity)?body.angularVelocity:0;
+ const omega=previous+Math.max(-acceleration*dt,Math.min(acceleration*dt,desired-previous));
+ const step=(previous+omega)*.5*dt;
+ if(Math.sign(step)===Math.sign(delta)&&Math.abs(step)>=Math.abs(delta)){body.a+=delta;body.angularVelocity=0}
+ else{body.a+=step;body.angularVelocity=omega}
+ body.steering=limit?body.angularVelocity/limit:0;
+}
 function flyAlien(p,wantX,wantY,speed,turn,dt,aim=null){
  if(Number.isInteger(p.style)&&p.style!==23&&p!==ship&&p!==encounter?.player){flySourceAlien(p,wantX,wantY,speed,turn,dt);return;}
  if(p.style===23&&p!==ship&&p!==encounter?.player){flyInertialessAlien(p,wantX,wantY,speed,turn,dt);return}
  p.vx=Number.isFinite(p.vx)?p.vx:0;p.vy=Number.isFinite(p.vy)?p.vy:0;
- // Correct the entire velocity vector, including sideways drift, using forward thrust only.
- let dx=wantX-p.vx,dy=wantY-p.vy,error=Math.hypot(dx,dy);
- let bearing=error>.08?Math.atan2(dy,dx):Math.hypot(wantX,wantY)>.08?Math.atan2(wantY,wantX):p.a;
- let delta=Math.atan2(Math.sin(bearing-p.a),Math.cos(bearing-p.a));
- p.steering=Math.max(-1,Math.min(1,delta));p.a+=Math.max(-turn*dt,Math.min(turn*dt,delta));
- let isAlien=Number.isInteger(p.style)&&p!==ship&&p!==encounter?.player,acceleration=isAlien?alienMotion(p.style,p).acceleration:Math.max(.2,speed*2.6),alignment=Math.cos(bearing-p.a);
- p.thrust=error>.08&&alignment>.97?Math.min(1,error/(acceleration*.3)):0;
+ // Smooth guidance, not velocity: there is no sideways drag or automatic braking.
+ const dx=wantX-p.vx,dy=wantY-p.vy,error=Math.hypot(dx,dy),blend=1-Math.exp(-dt/.25);
+ p.guidanceX=(p.guidanceX??dx)+(dx-(p.guidanceX??dx))*blend;
+ p.guidanceY=(p.guidanceY??dy)+(dy-(p.guidanceY??dy))*blend;
+ const deadBand=Math.max(.08,speed*.15),correction=Math.hypot(p.guidanceX,p.guidanceY);
+ const bearing=correction>deadBand?Math.atan2(p.guidanceY,p.guidanceX):p.a;
+ rotateSpacecraft(p,bearing,turn,dt);
+ const isAlien=Number.isInteger(p.style)&&p!==ship&&p!==encounter?.player,acceleration=isAlien?alienMotion(p.style,p).acceleration:Math.max(.2,speed*1.6),alignment=Math.cos(bearing-p.a);
+ const throttle=error>deadBand&&correction>deadBand?Math.min(1,error/(acceleration*.45))*Math.max(0,Math.min(1,(alignment-.65)/.35)):0;
+ p.thrust=(p.thrust||0)+(throttle-(p.thrust||0))*(1-Math.exp(-dt/.18));
+ if(p.thrust<.001)p.thrust=0;
  p.vx+=Math.cos(p.a)*acceleration*p.thrust*dt;p.vy+=Math.sin(p.a)*acceleration*p.thrust*dt;
  if(isAlien){let velocity=Math.hypot(p.vx,p.vy);if(velocity>speed){p.vx*=speed/velocity;p.vy*=speed/velocity;}}
  p.x+=p.vx*dt;p.y+=p.vy*dt;
@@ -1288,10 +1303,8 @@ function recordCombatTurn(body,angle,time,duration){
  const change=Math.atan2(Math.sin(angle-turn.to),Math.cos(angle-turn.to));
  if(Math.abs(change)>1e-7){
   const from=combatRenderAngle(body,time),delta=Math.atan2(Math.sin(angle-from),Math.cos(angle-from));
-  // Instant reversals and teleport facings remain instant abilities.
-  const snap=Math.abs(change)>Math.PI/4+1e-7;
-  turn.from=snap?angle:from;turn.to=snap?angle:from+delta;turn.at=time;
-  turn.duration=Math.max(UQM_TICK,duration);
+  turn.from=from;turn.to=from+delta;turn.at=time;
+  turn.duration=Math.max(UQM_TICK,Math.min(.22,duration),Math.abs(delta)/Math.PI);
  }
  return angle;
 }
@@ -1320,7 +1333,7 @@ function smoothShipVisual(body,time,angle=body.a){
  let v=shipVisualMotion.get(body);
  if(!v||time<v.at){v={at:time,a:angle,thrust:body.thrust||0};shipVisualMotion.set(body,v)}
  const dt=Math.max(0,time-v.at),delta=Math.atan2(Math.sin(angle-v.a),Math.cos(angle-v.a));
- if(Math.abs(delta)>Math.PI*.75)v.a=angle;else v.a+=delta*(1-Math.exp(-dt/.075));
+ rotateSpacecraft(v,v.a+delta,Math.PI*1.5,Math.min(.1,dt));
  v.thrust+=((body.thrust||0)-v.thrust)*(1-Math.exp(-dt/.12));v.at=time;
  return {a:v.a,thrust:v.thrust};
 }

@@ -15,6 +15,7 @@ assert.equal(w.alienEncounterBalance(1,1,.5).resistance,120);assert.equal(w.alie
 assert.ok(w.alienEncounterBalance(5,1,1).resistance>w.alienEncounterBalance(5,1,0).resistance);
 // Saved world migrations scale only live HP, once, including later universes.
 for(const universe of [1,2])for(const version of [undefined,1]){const oldFactor=version===1&&universe===1?16:1,oldHP=20*oldFactor,newFactor=16*1.15**2,live=oldHP*newFactor/oldFactor;assert.ok(Math.abs(live-20*newFactor)<1e-8);assert.equal(0*newFactor/oldFactor,0)}
+vm.runInContext(src.slice(src.indexOf('function rotateSpacecraft('),src.indexOf('function flyAlien(')),w);
 vm.runInContext(src.slice(src.indexOf('const shipVisualMotion='),src.indexOf('function nativePilotInput(')),w);
 let body={a:0,thrust:0};let v=w.smoothShipVisual(body,0);body.a=.4;body.thrust=1;v=w.smoothShipVisual(body,.02);assert.ok(v.a>0&&v.a<.4);assert.ok(v.thrust>0&&v.thrust<1);assert.equal(body.a,.4);assert.equal(body.thrust,1);for(let i=2;i<=30;i++)v=w.smoothShipVisual(body,i*.02);assert.ok(Math.abs(v.a-.4)<.001);assert.ok(v.thrust>.99);
 console.log('PASS: 33% recipe boundary, one roll per site, no duplicates or active-job drops, fleet thresholds, balance variation, HP migration, and visual smoothing.');

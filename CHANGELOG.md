@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.9.65
+
+- Give mining and host-controlled ships angular acceleration and braking rather than immediate heading corrections. Forward thrust bends the velocity vector; coasting preserves momentum.
+- Smooth guidance and throttle, with a dead band to stop repeated reversals near cruise velocity.
+- Remove large-angle snaps from combat turn interpolation and visual smoothing. Native combat AI, physics and collision masks remain authoritative.
+- Preserve velocity when returning from combat instead of instantly resetting cruise speed.
+
 ## 0.9.64
 
 - Bound host projectile collision work after long relative moves. Use continuous segment tests for long sweeps and do not collide along Arilou teleport routes.
