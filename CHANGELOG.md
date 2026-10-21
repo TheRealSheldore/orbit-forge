@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.9.67
+
+- Add a visible independently rotating player turret during mining, combat and recovery.
+- Launch cannon, lance, scatter and mortar shots from the barrel. Wait for turret alignment before consuming their firing cooldowns.
+- Keep total projectile range measured from the ship and retain turret heading across combat transitions.
+
 ## 0.9.66
 
 - Advance ship visual rotation using mining simulation time outside combat. Previously the combat clock defaulted to zero and froze the displayed heading during mining.

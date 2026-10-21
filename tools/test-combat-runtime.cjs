@@ -4,7 +4,7 @@ const lines=src.split('\n');
 function declaration(prefix){let i=lines.findIndex(l=>l.startsWith(prefix));if(i<0)throw Error(prefix);let s='';for(;i<lines.length;i++){s+=lines[i]+'\n';try{new vm.Script(s);return s}catch{}}throw Error(prefix)}
 const w={console,WebAssembly,atob,btoa,performance,Uint8Array,Uint32Array,Int32Array,Math,globalThis:null};w.globalThis=w;vm.createContext(w);
 for(const line of lines)if(line.startsWith('function ')){const name=line.match(/^function (\w+)/)[1];vm.runInContext(declaration('function '+name+'('),w)}
-for(const key of ['ALIEN_HULLS','PLAYER_HULL_SIZE','COMBAT_MASKS','ALIEN_COMBAT','SHIP_SPRITE_RECTS','ALIEN_SOURCE','ALIEN_STATS','combatVisualTurns','combatVisualPositions','shipVisualMotion','defaults','SHIP_SYSTEMS','SYSTEM_BASE_COST','MERCHANT_RELICS','EQUIPMENT'])vm.runInContext(declaration('const '+key+'='),w);
+for(const key of ['ALIEN_HULLS','PLAYER_HULL_SIZE','COMBAT_MASKS','ALIEN_COMBAT','SHIP_SPRITE_RECTS','ALIEN_SOURCE','ALIEN_STATS','combatVisualTurns','combatVisualPositions','shipVisualMotion','PLAYER_TURRET_REACH','defaults','SHIP_SYSTEMS','SYSTEM_BASE_COST','MERCHANT_RELICS','EQUIPMENT'])vm.runInContext(declaration('const '+key+'='),w);
 vm.runInContext("const TAU=Math.PI*2,UQM_TICK=1/24,UQM_WIDTH=32704,UQM_HEIGHT=32704;",w);
 vm.runInContext(declaration('const WEAPONS='),w);
 for(const key of ['ALIEN_ENGINES','PLAYER_ENGINES','PLAYER_WEAPON_COLORS','ALIEN_WEAPON_SPRITES'])vm.runInContext(declaration('const '+key+'='),w);

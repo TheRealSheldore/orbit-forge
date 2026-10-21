@@ -28,7 +28,7 @@ vm.runInContext(source.split('\n').find(l=>l.startsWith('const combatVisualTurns
 vm.runInContext(source.slice(source.indexOf('function combatRenderAngle('),source.indexOf('function recordCombatTurn(')),w);
 vm.runInContext(source.split('\n').find(l=>l.startsWith('const combatVisualPositions=')),w);
 vm.runInContext(source.split('\n').find(l=>l.startsWith('function drawPlayerShip(')),w);
-let rendered=0;Object.assign(w,{mapZoom:1,PLAYER_HULL_SIZE:.65,ctx:{save(){},restore(){},translate(){},rotate(a){rendered=a-Math.PI/2},scale(){}},drawPlayerThrusters(){},drawShipHull(){}});
+let rendered=0;Object.assign(w,{mapZoom:1,PLAYER_HULL_SIZE:.65,ctx:{save(){},restore(){},translate(){},rotate(a){rendered=a-Math.PI/2},scale(){}},drawPlayerThrusters(){},drawShipHull(){},drawPlayerTurret(){}});
 for(const mode of ['mining','combat']){
  const craft=body();w.encounter=mode==='combat'?{elapsed:0}:null;w.simulationTime=0;w.drawPlayerShip(craft,0,0,1,0);const start=rendered;
  for(let i=1;i<=120;i++){w.simulationTime=i*1000/60;if(w.encounter)w.encounter.elapsed=i/60;craft.a=Math.PI/2;w.drawPlayerShip(craft,0,0,1,w.simulationTime)}
