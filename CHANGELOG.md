@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.9.70
+
+- Clear native and host projectiles, deployed combat actors and active beams when combat ends. Hide native weapon entities outside combat, including restored departure scenes.
+
 ## 0.9.69
 
 - Deliver an editable folder version with a Windows launcher and a local server. Code and settings refresh without rebuilding or redistributing media.
